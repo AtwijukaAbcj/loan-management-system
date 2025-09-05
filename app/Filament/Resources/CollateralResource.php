@@ -13,6 +13,10 @@ class CollateralResource extends Resource
     protected static ?string $navigationGroup = null;
     protected static ?string $navigationIcon = null;
     protected static ?string $navigationLabel = null;
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
     public static function form(Form $form): Form
     {
         return $form->schema([

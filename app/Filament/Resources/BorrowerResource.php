@@ -255,18 +255,11 @@ class BorrowerResource extends Resource
                             $media = $borrower->getMedia('collaterals')->firstWhere('file_name', $collateral->document_path);
                             return Grid::make(2)
                                 ->schema([
-                                    TextEntry::make('collateral_name')
-                                        ->label('Collateral Name')
-                                        ->default($collateral->collateral_name ?? '-')
-                                        ->columnSpan(1),
-                                    TextEntry::make('item_value')
-                                        ->label('Market Value (UGX)')
-                                        ->default($collateral->item_value ?? '-')
-                                        ->columnSpan(1),
-                                    TextEntry::make('item_type')
-                                        ->label('Type')
-                                        ->default($collateral->item_type ?? '-')
-                                        ->columnSpan(1),
+                                    TextEntry::make('collateral_name')->label('Collateral Name')->default($collateral->collateral_name ?? '-'),
+                                    TextEntry::make('item_value')->label('Market Value (UGX)')->default($collateral->item_value ?? '-'),
+                                    TextEntry::make('item_type')->label('Type')->default($collateral->item_type ?? '-'),
+                                    TextEntry::make('item_description')->label('Description')->default($collateral->item_description ?? '-'),
+                                    TextEntry::make('loan_id')->label('Loan ID')->default($collateral->loan_id ?? '-'),
                                     Actions::make([
                                         Action::make('download_' . ($media ? $media->id : $collateral->id))
                                             ->label('Download Collateral')
