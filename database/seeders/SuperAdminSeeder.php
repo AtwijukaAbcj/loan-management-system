@@ -27,6 +27,28 @@ class SuperAdminSeeder extends Seeder
     $permissions = \Spatie\Permission\Models\Permission::all();
     $role->syncPermissions($permissions);
 
+    // Explicitly assign all PesapalSetting permissions if they exist
+    $pesapalPermissions = [
+        'view pesapalsetting',
+        'view any pesapalsetting',
+        'create pesapalsetting',
+        'update pesapalsetting',
+        'delete pesapalsetting',
+        'delete any pesapalsetting',
+        'force delete pesapalsetting',
+        'force delete any pesapalsetting',
+        'restore pesapalsetting',
+        'restore any pesapalsetting',
+        'replicate pesapalsetting',
+        'reorder pesapalsetting',
+    ];
+    foreach ($pesapalPermissions as $perm) {
+        $permission = \Spatie\Permission\Models\Permission::where('name', $perm)->first();
+        if ($permission) {
+            $role->givePermissionTo($permission);
+        }
+    }
+
     // Assign the role to the user
     $user->assignRole($role);
     $this->command->info('Super admin role assigned to user: ' . $user->email . ' with all permissions.');
