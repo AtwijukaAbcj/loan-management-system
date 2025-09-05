@@ -251,32 +251,39 @@ class BorrowerResource extends Resource
                             )
                         ),
 
-                        ...\App\Models\Collateral::where('borrower_id', $borrower->id)->get()->map(function ($collateral) {
+                        ...\App\Models\Collateral::where('borrower_id', $borrower->id)->get()->map(function ($collateral) use ($borrower) {
                             $media = $borrower->getMedia('collaterals')->firstWhere('file_name', $collateral->document_path);
-                            return Actions::make([
-                                Action::make('download_' . ($media ? $media->id : $collateral->id))
-                                    ->label('Download Collateral')
-                                    ->icon('heroicon-o-arrow-down-tray')
-                                    ->url($media ? $media->getUrl() : '#')
-                                    ->openUrlInNewTab()
-                                    ->outlined()
-                                    ->color('primary'),
-                                Action::make('view_' . ($media ? $media->id : $collateral->id))
-                                    ->label('View Collateral')
-                                    ->icon('heroicon-o-eye')
-                                    ->url($media ? $media->getUrl() : '#')
-                                    ->openUrlInNewTab()
-                                    ->outlined()
-                                    ->color('secondary'),
-                            ])
-                            ->extraAttributes([
-                                'style' => 'display:flex;align-items:center;gap:1rem;'
-                            ])
-                            ->description(
-                                'Name: ' . ($collateral->collateral_name ?? '-') .
-                                ' | Market Value: ' . ($collateral->item_value ?? '-') .
-                                ' | Type: ' . ($collateral->item_type ?? '-')
-                            );
+                            return Grid::make(2)
+                                ->schema([
+                                    TextEntry::make('collateral_name')
+                                        ->label('Collateral Name')
+                                        ->default($collateral->collateral_name ?? '-')
+                                        ->columnSpan(1),
+                                    TextEntry::make('item_value')
+                                        ->label('Market Value (UGX)')
+                                        ->default($collateral->item_value ?? '-')
+                                        ->columnSpan(1),
+                                    TextEntry::make('item_type')
+                                        ->label('Type')
+                                        ->default($collateral->item_type ?? '-')
+                                        ->columnSpan(1),
+                                    Actions::make([
+                                        Action::make('download_' . ($media ? $media->id : $collateral->id))
+                                            ->label('Download Collateral')
+                                            ->icon('heroicon-o-arrow-down-tray')
+                                            ->url($media ? $media->getUrl() : '#')
+                                            ->openUrlInNewTab()
+                                            ->outlined()
+                                            ->color('primary'),
+                                        Action::make('view_' . ($media ? $media->id : $collateral->id))
+                                            ->label('View Collateral')
+                                            ->icon('heroicon-o-eye')
+                                            ->url($media ? $media->getUrl() : '#')
+                                            ->openUrlInNewTab()
+                                            ->outlined()
+                                            ->color('secondary'),
+                                    ])
+                                ]);
                         })->toArray(),
 
                     ]),
