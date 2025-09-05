@@ -45,6 +45,9 @@ class PesapalSettingsResource extends Resource
                 Tables\Columns\TextColumn::make('consumer_secret')->label('Consumer Secret')->searchable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->label('Active'),
             ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
