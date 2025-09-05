@@ -41,6 +41,38 @@ class BorrowerResource extends Resource
 
 
     public static function infolist(Infolist $infolist): Infolist
+                Section::make('Collateral Details')
+                    ->description('All collateral items for this borrower')
+                    ->icon('heroicon-o-archive-box')
+                    ->schema([
+                        ...\App\Models\Collateral::where('borrower_id', $borrower->id)->get()->map(function ($collateral) use ($borrower) {
+                            $media = $borrower->getMedia('collaterals')->firstWhere('file_name', $collateral->document_path);
+                            return Grid::make(2)
+                                ->schema([
+                                    TextEntry::make('collateral_name')->label('Collateral Name')->default($collateral->collateral_name ?? '-'),
+                                    TextEntry::make('item_value')->label('Market Value (UGX)')->default($collateral->item_value ?? '-'),
+                                    TextEntry::make('item_type')->label('Type')->default($collateral->item_type ?? '-'),
+                                    TextEntry::make('item_description')->label('Description')->default($collateral->item_description ?? '-'),
+                                    TextEntry::make('loan_id')->label('Loan ID')->default($collateral->loan_id ?? '-'),
+                                    Actions::make([
+                                        Action::make('download_' . ($media ? $media->id : $collateral->id))
+                                            ->label('Download Collateral')
+                                            ->icon('heroicon-o-arrow-down-tray')
+                                            ->url($media ? $media->getUrl() : '#')
+                                            ->openUrlInNewTab()
+                                            ->outlined()
+                                            ->color('primary'),
+                                        Action::make('view_' . ($media ? $media->id : $collateral->id))
+                                            ->label('View Collateral')
+                                            ->icon('heroicon-o-eye')
+                                            ->url($media ? $media->getUrl() : '#')
+                                            ->openUrlInNewTab()
+                                            ->outlined()
+                                            ->color('secondary'),
+                                    ])
+                                ]);
+                        })->toArray(),
+                    ]),
     {
 
 
@@ -247,33 +279,7 @@ class BorrowerResource extends Resource
                             )
                         ),
 
-                        ...\App\Models\Collateral::where('borrower_id', $borrower->id)->get()->map(function ($collateral) use ($borrower) {
-                            $media = $borrower->getMedia('collaterals')->firstWhere('file_name', $collateral->document_path);
-                            return Grid::make(2)
-                                ->schema([
-                                    TextEntry::make('collateral_name')->label('Collateral Name')->default($collateral->collateral_name ?? '-'),
-                                    TextEntry::make('item_value')->label('Market Value (UGX)')->default($collateral->item_value ?? '-'),
-                                    TextEntry::make('item_type')->label('Type')->default($collateral->item_type ?? '-'),
-                                    TextEntry::make('item_description')->label('Description')->default($collateral->item_description ?? '-'),
-                                    TextEntry::make('loan_id')->label('Loan ID')->default($collateral->loan_id ?? '-'),
-                                    Actions::make([
-                                        Action::make('download_' . ($media ? $media->id : $collateral->id))
-                                            ->label('Download Collateral')
-                                            ->icon('heroicon-o-arrow-down-tray')
-                                            ->url($media ? $media->getUrl() : '#')
-                                            ->openUrlInNewTab()
-                                            ->outlined()
-                                            ->color('primary'),
-                                        Action::make('view_' . ($media ? $media->id : $collateral->id))
-                                            ->label('View Collateral')
-                                            ->icon('heroicon-o-eye')
-                                            ->url($media ? $media->getUrl() : '#')
-                                            ->openUrlInNewTab()
-                                            ->outlined()
-                                            ->color('secondary'),
-                                    ])
-                                ]);
-                        })->toArray(),
+                        // ...existing code...
 
                     ]),
             ]);
