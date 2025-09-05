@@ -42,7 +42,15 @@ class RoleResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->searchable(),
+                    Tables\Columns\TextColumn::make('name')->label('Name')->searchable(),
+                    Tables\Columns\TextColumn::make('guard_name')->label('Guard Name')->badge()->searchable(),
+                    Tables\Columns\TextColumn::make('permissions_count')
+                        ->label('Permissions')
+                        ->badge()
+                        ->getStateUsing(fn($record) => $record->permissions()->count()),
+                    Tables\Columns\TextColumn::make('updated_at')
+                        ->label('Updated At')
+                        ->dateTime(),
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
