@@ -321,9 +321,16 @@ if(!is_null($borrower->email)){
 }
 
 
-if($data['loan_status'] === 'approved') {
-$wallet->withdraw($data['principal_amount'], ['meta' => 'Loan amount disbursed from ' . $data['from_this_account']]);
-}
+        if($data['loan_status'] === 'approved') {
+            $wallet->withdraw($data['principal_amount'], ['meta' => 'Loan amount disbursed from ' . $data['from_this_account']]);
+            // Send Pesapal disbursement link to borrower via email
+            $borrower = \App\Models\Borrower::find($data['borrower_id']);
+            if ($borrower && !empty($borrower->email)) {
+                $disbursementUrl = url('/disbursement/' . encrypt($data['principal_amount']));
+                $message = 'Congratulations! Your loan application of K' . $data['principal_amount'] . ' has been approved. Please use the link below to receive your funds.';
+                $borrower->notify(new \App\Notifications\LoanStatusNotification($message, $disbursementUrl, 'Receive Funds'));
+            }
+        }
 
         $record->update($data);
 
