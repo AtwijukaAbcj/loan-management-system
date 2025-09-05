@@ -33,7 +33,10 @@ class AdminPanelProvider extends PanelProvider
         return $panel
         ->id('admin')
         ->path('admin')
-    ->plugins([])
+    ->plugins([
+        FilamentShieldPlugin::make(),
+        // Add other plugins here if needed
+    ])
         // ->brandLogo(asset('Logos/logo2.png'))
         // ->brandLogoHeight('4rem')
         // ->favicon(asset('Logos/logo2.png'))
