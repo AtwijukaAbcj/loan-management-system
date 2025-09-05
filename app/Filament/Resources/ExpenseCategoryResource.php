@@ -91,5 +91,5 @@ class ExpenseCategoryResource extends Resource
             'view' => Pages\ViewExpenseCategory::route('/{record}'),
             'edit' => Pages\EditExpenseCategory::route('/{record}/edit'),
         ];
-    }
+    }    
 }

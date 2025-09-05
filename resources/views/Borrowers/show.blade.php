@@ -59,16 +59,8 @@
                       <p class="text-muted mb-4">{{ $borrower->dob }}</p>
                       <p class="text-muted mb-4">{{ $borrower->occupation }}</p>
                       <div class="d-flex justify-content-center mb-2">
+                        
                         <button type="button" class="btn btn-outline-primary ms-1"><a href="mailto:{{ $borrower->email }}">Message</a></button>
-                      </div>
-                      <div class="d-flex justify-content-center mb-2">
-                        @php
-                          $loan = $borrower->loan()->where('loan_status', 'approved')->first();
-                          $repaymentAmount = $loan ? $loan->balance : 100;
-                          $disbursementAmount = $loan ? $loan->principal_amount : 100;
-                        @endphp
-                        <a href="{{ url('/repayment/' . encrypt($repaymentAmount)) }}" class="btn btn-success me-2">Make Repayment</a>
-                        <a href="{{ url('/disbursement/' . encrypt($disbursementAmount)) }}" class="btn btn-warning">Receive Funds</a>
                       </div>
                     </div>
                   </div>

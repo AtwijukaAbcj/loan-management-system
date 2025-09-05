@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filament\Resources;
 
 use Filament\Infolists\Components\Grid;
@@ -28,42 +29,333 @@ use Filament\Support\Enums\FontWeight;
 
 
 
-class BorrowerResource extends Resource {
-    public static function table(Table $table): Table
+class BorrowerResource extends Resource
+{
+    protected static ?string $model = Borrower::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationLabel = 'Borrowers';
+
+    protected static ?string $navigationGroup = 'Customers';
+
+
+
+    public static function infolist(Infolist $infolist): Infolist
     {
-        return $table
-            ->headerActions([
-                ExportAction::make()
-                    ->exporter(BorrowerExporter::class)
-            ])
-            ->columns([
-                Tables\Columns\TextColumn::make('first_name')->label('First Name')->searchable(),
-                Tables\Columns\TextColumn::make('last_name')->label('Last Name')->searchable(),
-                Tables\Columns\TextColumn::make('full_name')->label('Full Name')->searchable(),
-                Tables\Columns\TextColumn::make('gender')->label('Gender'),
-                Tables\Columns\TextColumn::make('dob')->label('Date of Birth')->date(),
-                Tables\Columns\TextColumn::make('occupation')->label('Occupation'),
-                Tables\Columns\TextColumn::make('identification')->label('National ID'),
-                Tables\Columns\TextColumn::make('mobile')->label('Phone')->searchable(),
-                Tables\Columns\TextColumn::make('email')->label('Email')->searchable(),
-                Tables\Columns\TextColumn::make('address')->label('Address'),
-                Tables\Columns\TextColumn::make('city')->label('City'),
-                Tables\Columns\TextColumn::make('province')->label('Province'),
-                Tables\Columns\TextColumn::make('zipcode')->label('Zipcode'),
-                Tables\Columns\TextColumn::make('mobile_money_name')->label('Mobile Money Name'),
-                Tables\Columns\TextColumn::make('mobile_money_number')->label('Mobile Money Number'),
-                Tables\Columns\TextColumn::make('created_at')->label('Created')->dateTime(),
-            ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
-            ])
-            ->defaultSort('created_at', 'desc');
+
+
+        $borrower = $infolist->getRecord();
+
+        return $infolist
+            ->schema([
+                Section::make('Personal Details')
+                    ->description('Borrower Personal Details')
+                    ->icon('heroicon-o-user-circle')
+                    ->schema([
+                        Grid::make(2)
+                            ->schema([
+                                TextEntry::make('first_name')
+                                    ->icon('heroicon-o-user'),
+                                TextEntry::make('last_name')
+                                    ->icon('heroicon-o-user'),
+                                TextEntry::make('gender')
+                                    ->icon('heroicon-o-sparkles'),
+                                TextEntry::make('dob')
+                                    ->label('Date of Birth')
+                                    ->date('j F Y')
+                                    ->icon('heroicon-o-cake'),
+                                TextEntry::make('occupation')
+                                    ->icon('heroicon-o-briefcase'),
+                                TextEntry::make('identification')
+                                    ->icon('heroicon-o-identification'),
+                                TextEntry::make('mobile')
+                                    ->icon('heroicon-o-phone'),
+                                TextEntry::make('email')
+                                    ->icon('heroicon-o-envelope'),
+                                TextEntry::make('address')
+                                    ->icon('heroicon-o-map-pin')
+                                    ->columnSpanFull(),
+                                TextEntry::make('city')
+                                    ->icon('heroicon-o-building-office'),
+                                TextEntry::make('province')
+                                    ->icon('heroicon-o-map'),
+                                TextEntry::make('zipcode')
+                                    ->icon('heroicon-o-tag'),
+                            ]),
+                    ]),
+
+                Section::make('Next of Kin Details')
+                    ->description('Borrower Next Of Kin Details')
+                    ->icon('heroicon-o-user-group')
+                    ->schema([
+                        Grid::make(2)
+                            ->schema([
+                                TextEntry::make('next_of_kin_first_name')
+                                    ->icon('heroicon-o-user'),
+                                TextEntry::make('next_of_kin_last_name')
+                                    ->icon('heroicon-o-user'),
+                                TextEntry::make('phone_next_of_kin')
+                                    ->icon('heroicon-o-phone'),
+                                TextEntry::make('address_next_of_kin')
+                                    ->icon('heroicon-o-map-pin'),
+                                TextEntry::make('relationship_next_of_kin')
+                                    ->icon('heroicon-o-heart')
+                                    ->columnSpanFull(),
+                            ]),
+                    ]),
+
+                Section::make('Bank Details')
+                    ->description('Borrower Bank Details')
+                    ->icon('heroicon-o-building-library')
+                    ->schema([
+                        Grid::make(2)
+                            ->schema([
+                                TextEntry::make('bank_name')
+                                    ->icon('heroicon-o-building-office'),
+                                TextEntry::make('bank_branch')
+                                    ->icon('heroicon-o-building-office'),
+                                TextEntry::make('bank_sort_code')
+                                    ->icon('heroicon-o-banknotes'),
+                                TextEntry::make('bank_account_number')
+                                    ->icon('heroicon-o-credit-card'),
+                                TextEntry::make('bank_account_name')
+                                    ->icon('heroicon-o-user'),
+                                TextEntry::make('mobile_money_name')
+                                    ->icon('heroicon-o-device-phone-mobile'),
+                                TextEntry::make('mobile_money_number')
+                                    ->icon('heroicon-o-phone'),
+                            ]),
+                    ]),
+
+
+
+                Section::make('Attached Files')
+                    ->schema([
+                        Actions::make(
+                            array_merge(
+                                ...$borrower->getMedia('payslips')->map(function ($media) {
+                                    return [
+                                        Action::make('download_' . $media->id)
+                                            ->label('Download Payslip')
+                                            ->icon('heroicon-o-arrow-down-tray')
+                                            ->url($media->getUrl())
+                                            ->openUrlInNewTab()
+                                            ->outlined()
+                                            ->color('primary'),
+
+                                        Action::make('view_' . $media->id)
+                                            ->label('View Payslip')
+                                            ->icon('heroicon-o-eye')
+                                            ->url($media->getUrl())
+                                            ->openUrlInNewTab()
+                                            ->outlined()
+                                            ->color('secondary'),
+                                    ];
+                                })->toArray()
+                            )
+                        ),
+
+                        Actions::make(
+                            array_merge(
+                                ...$borrower->getMedia('bank_statements')->map(function ($media) {
+                                    return [
+                                        Action::make('download_' . $media->id)
+                                            ->label('Download Bank Statement')
+                                            ->icon('heroicon-o-arrow-down-tray')
+                                            ->url($media->getUrl())
+                                            ->openUrlInNewTab()
+                                            ->outlined()
+                                            ->color('primary'),
+
+                                        Action::make('view_' . $media->id)
+                                            ->label('View Bank Statement')
+                                            ->icon('heroicon-o-eye')
+                                            ->url($media->getUrl())
+                                            ->openUrlInNewTab()
+                                            ->outlined()
+                                            ->color('secondary'),
+                                    ];
+                                })->toArray()
+                            )
+                        ),
+
+                        Actions::make(
+                            array_merge(
+                                ...$borrower->getMedia('nrc')->map(function ($media) {
+                                    return [
+                                        Action::make('download_' . $media->id)
+                                            ->label('Download Nrc')
+                                            ->icon('heroicon-o-arrow-down-tray')
+                                            ->url($media->getUrl())
+                                            ->openUrlInNewTab()
+                                            ->outlined()
+                                            ->color('primary'),
+
+                                        Action::make('view_' . $media->id)
+                                            ->label('View Nrc')
+                                            ->icon('heroicon-o-eye')
+                                            ->url($media->getUrl())
+                                            ->openUrlInNewTab()
+                                            ->outlined()
+                                            ->color('secondary'),
+                                    ];
+                                })->toArray()
+                            )
+                        ),
+
+                        Actions::make(
+                            array_merge(
+                                ...$borrower->getMedia('proof_of_residence')->map(function ($media) {
+                                    return [
+                                        Action::make('download_' . $media->id)
+                                            ->label('Download Proof of Residence')
+                                            ->icon('heroicon-o-arrow-down-tray')
+                                            ->url($media->getUrl())
+                                            ->openUrlInNewTab()
+                                            ->outlined()
+                                            ->color('primary'),
+
+                                        Action::make('view_' . $media->id)
+                                            ->label('View Proof of Residence')
+                                            ->icon('heroicon-o-eye')
+                                            ->url($media->getUrl())
+                                            ->openUrlInNewTab()
+                                            ->outlined()
+                                            ->color('secondary'),
+                                    ];
+                                })->toArray()
+                            )
+                        ),
+
+                        Actions::make(
+                            array_merge(
+                                ...$borrower->getMedia('preapproval_letter')->map(function ($media) {
+                                    return [
+                                        Action::make('download_' . $media->id)
+                                            ->label('Download Preapproval Letter')
+                                            ->icon('heroicon-o-arrow-down-tray')
+                                            ->url($media->getUrl())
+                                            ->openUrlInNewTab()
+                                            ->outlined()
+                                            ->color('primary'),
+
+                                        Action::make('view_' . $media->id)
+                                            ->label('View Preapproval Letter')
+                                            ->icon('heroicon-o-eye')
+                                            ->url($media->getUrl())
+                                            ->openUrlInNewTab()
+                                            ->outlined()
+                                            ->color('secondary'),
+                                    ];
+                                })->toArray()
+                            )
+                        ),
+
+                        Actions::make(
+                            array_merge(
+                                ...$borrower->getMedia('collaterals')->map(function ($media) {
+                                    return [
+                                        Action::make('download_' . $media->id)
+                                            ->label('Download Collateral')
+                                            ->icon('heroicon-o-arrow-down-tray')
+                                            ->url($media->getUrl())
+                                            ->openUrlInNewTab()
+                                            ->outlined()
+                                            ->color('primary'),
+
+                                        Action::make('view_' . $media->id)
+                                            ->label('View Collateral')
+                                            ->icon('heroicon-o-eye')
+                                            ->url($media->getUrl())
+                                            ->openUrlInNewTab()
+                                            ->outlined()
+                                            ->color('secondary'),
+                                    ];
+                                })->toArray()
+                            )
+                        ),
+
+                    ]),
+            ]);
     }
+
+
+    protected static function getFileDisplaySchema(): array
+    {
+        return [
+            Grid::make(3)
+                ->schema([
+                    IconEntry::make('file_icon')
+                        ->icon(fn($state, $record) => self::getFileIcon($record['extension']))
+                        ->size(IconEntry\IconEntrySize::Large)
+                        ->color('primary'),
+
+                    TextEntry::make('file_name')
+                        ->weight(FontWeight::Bold)
+                        ->size(TextEntry\TextEntrySize::Large),
+
+                    TextEntry::make('file_size')
+                        ->color('gray')
+                        ->formatStateUsing(fn($state) => self::formatFileSize($state)),
+                ]),
+
+            Actions::make([
+                Action::make('view_file')
+                    ->label('View File')
+                    ->icon('heroicon-o-eye')
+                    ->url(fn($record) => $record['url'])
+                    ->openUrlInNewTab()
+                    ->size(ActionSize::Small),
+
+                Action::make('download_file')
+                    ->label('Download')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->url(fn($record) => $record['url'] . '?download=1')
+                    ->size(ActionSize::Small),
+            ])->verticalAlignment('center'),
+        ];
+    }
+    // Helper method to get appropriate file icons
+    protected static function getFileIcon(string $extension): string
+    {
+        $iconMap = [
+            'pdf' => 'heroicon-o-document-text',
+            'doc' => 'heroicon-o-document',
+            'docx' => 'heroicon-o-document',
+            'xls' => 'heroicon-o-table-cells',
+            'xlsx' => 'heroicon-o-table-cells',
+            'jpg' => 'heroicon-o-photo',
+            'jpeg' => 'heroicon-o-photo',
+            'png' => 'heroicon-o-photo',
+            'gif' => 'heroicon-o-photo',
+            'txt' => 'heroicon-o-document',
+            'zip' => 'heroicon-o-archive-box',
+            'rar' => 'heroicon-o-archive-box',
+        ];
+
+        return $iconMap[strtolower($extension)] ?? 'heroicon-o-document';
+    }
+
+    // Helper method to format file size
+    protected static function formatFileSize(int $size): string
+    {
+        if ($size == 0) return '0 Bytes';
+
+        $units = ['Bytes', 'KB', 'MB', 'GB'];
+        $i = floor(log($size, 1024));
+
+        return round($size / pow(1024, $i), 2) . ' ' . $units[$i];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+
+
+
+
     public static function form(Form $form): Form
     {
         return $form
@@ -78,14 +370,17 @@ class BorrowerResource extends Resource {
                     ->prefixIcon('heroicon-o-user')
                     ->required()
                     ->maxLength(255),
+
                 Forms\Components\TextInput::make('full_name')
                     ->hidden(),
+
                 Forms\Components\Select::make('gender')
                     ->label('Gender')
                     ->prefixIcon('heroicon-o-users')
                     ->options([
                         'male' => 'Male',
-                        'female' => 'Female',
+                        'female' => 'female',
+
                     ])
                     ->required(),
                 Forms\Components\DatePicker::make('dob')
@@ -95,11 +390,13 @@ class BorrowerResource extends Resource {
                     ->native(false)
                     ->maxDate(now()),
                 Forms\Components\Select::make('occupation')
+
                     ->options([
                         'employed' => 'Employed',
                         'self employed' => 'Self Employed',
                         'unemployed' => 'Un-Employed',
                         'student' => 'Student',
+
                     ])
                     ->prefixIcon('heroicon-o-briefcase')
                     ->required(),
@@ -121,8 +418,11 @@ class BorrowerResource extends Resource {
                     ->maxLength(255),
                 Forms\Components\Textarea::make('address')
                     ->label('Address')
+
                     ->required()
+
                     ->maxLength(255),
+
                 Forms\Components\TextInput::make('city')
                     ->label('City')
                     ->prefixIcon('fas-map-marker')
@@ -150,6 +450,7 @@ class BorrowerResource extends Resource {
                     ->prefixIcon('heroicon-o-phone')
                     ->tel(),
                 Forms\Components\Textarea::make('address_next_of_kin')
+
                     ->maxLength(255),
                 Forms\Components\Select::make('relationship_next_of_kin')
                     ->label('Relationship to Next of Kin')
@@ -162,7 +463,8 @@ class BorrowerResource extends Resource {
                         'wife' => 'Wife',
                         'husband' => 'Husband',
                         'brother' => 'Brother',
-                        'Sister' => 'Sister',
+                        'Sister' => 'sister',
+
                     ]),
                 Forms\Components\TextInput::make('bank_name')
                     ->label('Bank Name')
@@ -183,6 +485,7 @@ class BorrowerResource extends Resource {
                 Forms\Components\TextInput::make('bank_account_name')
                     ->label('Bank Account Name')
                     ->maxLength(255),
+
                 Forms\Components\TextInput::make('mobile_money_name')
                     ->label('Mobile Money Name')
                     ->prefixIcon('fas-phone')
@@ -234,112 +537,94 @@ class BorrowerResource extends Resource {
                     ->maxSize(5120)
                     ->columnSpan(2)
                     ->openable(),
-                Forms\Components\Repeater::make('collateral_items')
-                    ->label('Collateral Items')
-                    ->schema([
-                        Forms\Components\TextInput::make('collateral_name')
-                            ->label('Collateral Name')
-                            ->required(),
-                        Forms\Components\TextInput::make('item_value')
-                            ->label('Market Value (UGX)')
-                            ->numeric(),
-                        Forms\Components\TextInput::make('item_type')
-                            ->label('Type'),
-                        SpatieMediaLibraryFileUpload::make('collateral_image')
-                            ->disk('borrowers')
-                            ->collection('collaterals')
-                            ->visibility('public')
-                            ->maxSize(5120)
-                            ->openable(),
-                    ])
-                    ->minItems(0)
-                    ->maxItems(10)
-                    ->columnSpan(2),
+                SpatieMediaLibraryFileUpload::make('collaterals')
+                    ->disk('borrowers')
+                    ->multiple()
+                    ->minFiles(0)
+                    ->maxFiles(10)
+                    ->collection('collaterals')
+                    ->visibility('public')
+                    ->maxSize(5120)
+                    ->columnSpan(2)
+                    ->openable(),
+
+
+
+
             ]);
     }
-    protected static ?string $model = Borrower::class;
-    protected static ?string $navigationIcon = 'heroicon-o-users';
-    protected static ?string $navigationLabel = 'Borrowers';
-    protected static ?string $navigationGroup = 'Customers';
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function table(Table $table): Table
     {
-        $borrower = $infolist->getRecord();
-        return $infolist->schema([
-            Section::make('Personal Details')
-                ->description('Borrower Personal Details')
-                ->icon('heroicon-o-user-circle')
-                ->schema([
-                    TextEntry::make('first_name')->label('First Name'),
-                    TextEntry::make('last_name')->label('Last Name'),
-                    TextEntry::make('full_name')->label('Full Name'),
-                    TextEntry::make('gender')->label('Gender'),
-                    TextEntry::make('dob')->label('Date of Birth'),
-                    TextEntry::make('occupation')->label('Occupation'),
-                    TextEntry::make('identification')->label('National ID'),
-                    TextEntry::make('mobile')->label('Phone'),
-                    TextEntry::make('email')->label('Email'),
-                    TextEntry::make('address')->label('Address'),
-                    TextEntry::make('city')->label('City'),
-                    TextEntry::make('province')->label('Province'),
-                    TextEntry::make('zipcode')->label('Zipcode'),
-                    TextEntry::make('next_of_kin_first_name')->label('Next of Kin First Name'),
-                    TextEntry::make('next_of_kin_last_name')->label('Next of Kin Last Name'),
-                    TextEntry::make('phone_next_of_kin')->label('Phone Next of Kin'),
-                    TextEntry::make('address_next_of_kin')->label('Address Next of Kin'),
-                    TextEntry::make('relationship_next_of_kin')->label('Relationship to Next of Kin'),
-                    TextEntry::make('bank_name')->label('Bank Name'),
-                    TextEntry::make('bank_branch')->label('Bank Branch'),
-                    TextEntry::make('bank_sort_code')->label('Bank Sort Code'),
-                    TextEntry::make('bank_account_number')->label('Bank Account Number'),
-                    TextEntry::make('bank_account_name')->label('Bank Account Name'),
-                    TextEntry::make('mobile_money_name')->label('Mobile Money Name'),
-                    TextEntry::make('mobile_money_number')->label('Mobile Money Number'),
+        return $table
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(BorrowerExporter::class)
+            ])
+            ->columns([
+                Tables\Columns\TextColumn::make('first_name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('last_name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('gender')
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('occupation')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('identification')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('mobile')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('created_by.name')
+                    ->searchable(),
+
+
+            ])
+
+            ->filters([
+                Tables\Filters\SelectFilter::make('gender')
+                    ->options([
+                        'male' => 'Male',
+                        'female' => 'Female',
+
+                    ]),
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
+
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()
                 ]),
-            Section::make('Collateral Details')
-                ->description('All collateral items for this borrower')
-                ->icon('heroicon-o-archive-box')
-                ->schema(
-                    \App\Models\Collateral::where('borrower_id', $borrower->id)->get()->map(function ($collateral) use ($borrower) {
-                        $media = $borrower->getMedia('collaterals')->firstWhere('file_name', $collateral->document_path);
-                        return Grid::make(2)
-                            ->schema([
-                                TextEntry::make('collateral_name')->label('Collateral Name')->default($collateral->collateral_name ?? '-'),
-                                TextEntry::make('item_value')->label('Market Value (UGX)')->default($collateral->item_value ?? '-'),
-                                TextEntry::make('item_type')->label('Type')->default($collateral->item_type ?? '-'),
-                                TextEntry::make('item_description')->label('Description')->default($collateral->item_description ?? '-'),
-                                TextEntry::make('loan_id')->label('Loan ID')->default($collateral->loan_id ?? '-'),
-                                Actions::make([
-                                    Action::make('download_' . ($media ? $media->id : $collateral->id))
-                                        ->label('Download Collateral')
-                                        ->icon('heroicon-o-arrow-down-tray')
-                                        ->url($media ? $media->getUrl() : '#')
-                                        ->openUrlInNewTab()
-                                        ->outlined()
-                                        ->color('primary'),
-                                    Action::make('view_' . ($media ? $media->id : $collateral->id))
-                                        ->label('View Collateral')
-                                        ->icon('heroicon-o-eye')
-                                        ->url($media ? $media->getUrl() : '#')
-                                        ->openUrlInNewTab()
-                                        ->outlined()
-                                        ->color('secondary'),
-                                ])
-                            ]);
-                    })->toArray()
-                ),
-            // ...other sections as needed...
-        ]);
+            ])
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make(),
+            ]);
+    }
+
+
+
+
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListBorrowers::route('/'),
+            'index' => Pages\ListBorrowers::route('/'),
             'create' => Pages\CreateBorrower::route('/create'),
-            'edit'   => Pages\EditBorrower::route('/{record}/edit'),
-            'view'   => Pages\ViewBorrower::route('/{record}'),
+            'view' => Pages\ViewBorrower::route('/{record}'),
+            'edit' => Pages\EditBorrower::route('/{record}/edit'),
         ];
     }
-
 }

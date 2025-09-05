@@ -121,10 +121,10 @@ class TransfersResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListTransfers::route('/'),
+            'index' => Pages\ListTransfers::route('/'),
             'create' => Pages\CreateTransfers::route('/create'),
-            'view'   => Pages\ViewTransfers::route('/{record}'),
-            'edit'   => Pages\EditTransfers::route('/{record}/edit'),
+            'view' => Pages\ViewTransfers::route('/{record}'),
+            'edit' => Pages\EditTransfers::route('/{record}/edit'),
         ];
     }
 }

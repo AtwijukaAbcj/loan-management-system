@@ -13,9 +13,6 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         \App\Models\User::factory(5)->create();
-        $this->call([
-            SuperAdminSeeder::class,
-        ]);
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
