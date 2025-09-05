@@ -251,29 +251,33 @@ class BorrowerResource extends Resource
                             )
                         ),
 
-                        Actions::make(
-                            array_merge(
-                                ...$borrower->getMedia('collaterals')->map(function ($media) {
-                                    return [
-                                        Action::make('download_' . $media->id)
-                                            ->label('Download Collateral')
-                                            ->icon('heroicon-o-arrow-down-tray')
-                                            ->url($media->getUrl())
-                                            ->openUrlInNewTab()
-                                            ->outlined()
-                                            ->color('primary'),
-
-                                        Action::make('view_' . $media->id)
-                                            ->label('View Collateral')
-                                            ->icon('heroicon-o-eye')
-                                            ->url($media->getUrl())
-                                            ->openUrlInNewTab()
-                                            ->outlined()
-                                            ->color('secondary'),
-                                    ];
-                                })->toArray()
-                            )
-                        ),
+                        ...\App\Models\Collateral::where('borrower_id', $borrower->id)->get()->map(function ($collateral) {
+                            $media = $borrower->getMedia('collaterals')->firstWhere('file_name', $collateral->document_path);
+                            return Actions::make([
+                                Action::make('download_' . ($media ? $media->id : $collateral->id))
+                                    ->label('Download Collateral')
+                                    ->icon('heroicon-o-arrow-down-tray')
+                                    ->url($media ? $media->getUrl() : '#')
+                                    ->openUrlInNewTab()
+                                    ->outlined()
+                                    ->color('primary'),
+                                Action::make('view_' . ($media ? $media->id : $collateral->id))
+                                    ->label('View Collateral')
+                                    ->icon('heroicon-o-eye')
+                                    ->url($media ? $media->getUrl() : '#')
+                                    ->openUrlInNewTab()
+                                    ->outlined()
+                                    ->color('secondary'),
+                            ])
+                            ->extraAttributes([
+                                'style' => 'display:flex;align-items:center;gap:1rem;'
+                            ])
+                            ->description(
+                                'Name: ' . ($collateral->collateral_name ?? '-') .
+                                ' | Market Value: ' . ($collateral->item_value ?? '-') .
+                                ' | Type: ' . ($collateral->item_type ?? '-')
+                            );
+                        })->toArray(),
 
                     ]),
             ]);
