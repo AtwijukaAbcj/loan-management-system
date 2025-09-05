@@ -299,8 +299,8 @@ class BorrowerResource extends Resource {
             Section::make('Collateral Details')
                 ->description('All collateral items for this borrower')
                 ->icon('heroicon-o-archive-box')
-                ->schema([
-                    ...\App\Models\Collateral::where('borrower_id', $borrower->id)->get()->map(function ($collateral) use ($borrower) {
+                ->schema(
+                    \App\Models\Collateral::where('borrower_id', $borrower->id)->get()->map(function ($collateral) use ($borrower) {
                         $media = $borrower->getMedia('collaterals')->firstWhere('file_name', $collateral->document_path);
                         return Grid::make(2)
                             ->schema([
@@ -326,8 +326,8 @@ class BorrowerResource extends Resource {
                                         ->color('secondary'),
                                 ])
                             ]);
-                    })->toArray(),
-                ]),
+                    })->toArray()
+                ),
             // ...other sections as needed...
         ]);
     }
