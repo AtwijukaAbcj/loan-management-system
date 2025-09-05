@@ -32,19 +32,20 @@ use Filament\Support\Enums\FontWeight;
 class BorrowerResource extends Resource
 {
     protected static ?string $model = Borrower::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $navigationLabel = 'Borrowers';
-
     protected static ?string $navigationGroup = 'Customers';
-
-
 
     public static function infolist(Infolist $infolist): Infolist
     {
         $borrower = $infolist->getRecord();
         return $infolist->schema([
-            // ...existing sections...
+            Section::make('Personal Details')
+                ->description('Borrower Personal Details')
+                ->icon('heroicon-o-user-circle')
+                ->schema([
+                    // ...existing personal details code...
+                ]),
             Section::make('Collateral Details')
                 ->description('All collateral items for this borrower')
                 ->icon('heroicon-o-archive-box')
@@ -77,91 +78,13 @@ class BorrowerResource extends Resource
                             ]);
                     })->toArray(),
                 ]),
-            // ...existing sections...
+            // ...other sections as needed...
         ]);
     }
-        $borrower = $infolist->getRecord();
-        return $infolist->schema([
-            // ...existing sections...
-            Section::make('Collateral Details')
-                ->description('All collateral items for this borrower')
-                ->icon('heroicon-o-archive-box')
-                ->schema([
-                    ...\App\Models\Collateral::where('borrower_id', $borrower->id)->get()->map(function ($collateral) use ($borrower) {
-                        $media = $borrower->getMedia('collaterals')->firstWhere('file_name', $collateral->document_path);
-                        return Grid::make(2)
-                            ->schema([
-                                TextEntry::make('collateral_name')->label('Collateral Name')->default($collateral->collateral_name ?? '-'),
-                                TextEntry::make('item_value')->label('Market Value (UGX)')->default($collateral->item_value ?? '-'),
-                                TextEntry::make('item_type')->label('Type')->default($collateral->item_type ?? '-'),
-                                TextEntry::make('item_description')->label('Description')->default($collateral->item_description ?? '-'),
-                                TextEntry::make('loan_id')->label('Loan ID')->default($collateral->loan_id ?? '-'),
-                                Actions::make([
-                                    Action::make('download_' . ($media ? $media->id : $collateral->id))
-                                        ->label('Download Collateral')
-                                        ->icon('heroicon-o-arrow-down-tray')
-                                        ->url($media ? $media->getUrl() : '#')
-                                        ->openUrlInNewTab()
-                                        ->outlined()
-                                        ->color('primary'),
-                                    Action::make('view_' . ($media ? $media->id : $collateral->id))
-                                        ->label('View Collateral')
-                                        ->icon('heroicon-o-eye')
-                                        ->url($media ? $media->getUrl() : '#')
-                                        ->openUrlInNewTab()
-                                        ->outlined()
-                                        ->color('secondary'),
-                                ])
-                            ]);
-                    })->toArray(),
-                ]),
-            // ...existing sections...
-        ]);
-    }
-    {
-
-
-        $borrower = $infolist->getRecord();
-
-        return $infolist
-            ->schema([
-                Section::make('Personal Details')
-                    ->description('Borrower Personal Details')
-                    ->icon('heroicon-o-user-circle')
-                    ->schema([
-                        Section::make('Attached Files')
-                            ->schema([
-                                Actions::make(
-                                    array_merge(
-                                        ...$borrower->getMedia('payslips')->map(function ($media) {
-                                            return [
-                                                Action::make('download_' . $media->id)
-                                                    ->label('Download Payslip')
-                                                    ->icon('heroicon-o-arrow-down-tray')
-                                                    ->url($media->getUrl())
-                                                    ->openUrlInNewTab()
-                                                    ->outlined()
-                                                    ->color('primary'),
-                                                Action::make('view_' . $media->id)
-                                                    ->label('View Payslip')
-                                                    ->icon('heroicon-o-eye')
-                                                    ->url($media->getUrl())
-                                                    ->openUrlInNewTab()
-                                                    ->outlined()
-                                                    ->color('secondary'),
-                                            ];
-                                        })->toArray()
-                                    )
-                                ),
-                                Actions::make(
-                                    array_merge(
-                                        ...$borrower->getMedia('bank_statements')->map(function ($media) {
-                                            return [
-                                                Action::make('download_' . $media->id)
-                                                    ->label('Download Bank Statement')
-                                                    ->icon('heroicon-o-arrow-down-tray')
-                                                    ->url($media->getUrl())
-                                                    ->openUrlInNewTab()
+    // ...existing code...
+}
+    // ...existing code...
+{
                                                     ->outlined()
                                                     ->color('primary'),
                                                 Action::make('view_' . $media->id)
