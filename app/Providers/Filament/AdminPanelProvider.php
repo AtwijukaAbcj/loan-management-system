@@ -33,12 +33,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
         ->id('admin')
         ->path('admin')
-        ->plugins([
-            ActivitylogPlugin::make()
-                ->authorize(
-                    fn () => auth()->user()->hasRole('super_admin')
-                ),
-        ])
+    ->plugins([])
         // ->brandLogo(asset('Logos/logo2.png'))
         // ->brandLogoHeight('4rem')
         // ->favicon(asset('Logos/logo2.png'))
