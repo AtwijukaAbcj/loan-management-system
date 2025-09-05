@@ -1,3 +1,4 @@
+}
 <?php
 
 namespace App\Filament\Resources;
@@ -33,6 +34,10 @@ class BorrowerResource extends Resource {
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(BorrowerExporter::class)
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('first_name')->label('First Name')->searchable(),
                 Tables\Columns\TextColumn::make('last_name')->label('Last Name')->searchable(),
