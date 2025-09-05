@@ -10,9 +10,9 @@ use App\Filament\Resources\CollateralResource\Pages;
 class CollateralResource extends Resource
 {
     protected static ?string $model = Collateral::class;
-    protected static ?string $navigationGroup = 'Loans';
-    protected static ?string $navigationIcon = 'heroicon-o-archive-box';
-    protected static ?string $navigationLabel = 'Collateral Security';
+    protected static ?string $navigationGroup = null;
+    protected static ?string $navigationIcon = null;
+    protected static ?string $navigationLabel = null;
     public static function form(Form $form): Form
     {
         return $form->schema([
