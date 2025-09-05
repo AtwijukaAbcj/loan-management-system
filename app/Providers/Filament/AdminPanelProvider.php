@@ -52,6 +52,28 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->resources([
                 \App\Filament\Resources\PesapalSettingsResource::class,
+                \App\Filament\Resources\CollateralResource::class,
+                \App\Filament\Resources\BorrowerResource::class,
+                \App\Filament\Resources\TransfersResource::class,
+                \App\Filament\Resources\WalletResource::class,
+                \App\Filament\Resources\ThirdPartyResource::class,
+                \App\Filament\Resources\SwitchBranchResource::class,
+                \App\Filament\Resources\UserResource::class,
+                \App\Filament\Resources\TransactionsResource::class,
+                \App\Filament\Resources\RepaymentsResource::class,
+                \App\Filament\Resources\LoanTypeResource::class,
+                \App\Filament\Resources\LoanSettlementFormsResource::class,
+                \App\Filament\Resources\MessagesResource::class,
+                \App\Filament\Resources\LoanRollOverResource::class,
+                \App\Filament\Resources\LoanRestructureResource::class,
+                \App\Filament\Resources\LoanResource::class,
+                \App\Filament\Resources\LoanAgreementFormsResource::class,
+                \App\Filament\Resources\ExpenseResource::class,
+                \App\Filament\Resources\ExpenseCategoryResource::class,
+                \App\Filament\Resources\ContactMessagesResource::class,
+                \App\Filament\Resources\BulkRepaymentsResource::class,
+                \App\Filament\Resources\BranchesResource::class,
+                \App\Filament\Resources\RoleResource::class,
             ])
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
