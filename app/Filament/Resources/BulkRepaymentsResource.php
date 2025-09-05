@@ -105,10 +105,10 @@ class BulkRepaymentsResource extends Resource
     public static function getPages(): array
     {
         return [
-            Pages\ListBulkRepayments::class,
-            Pages\CreateBulkRepayments::class,
-            Pages\ViewBulkRepayments::class,
-            Pages\EditBulkRepayments::class,
+            'index' => Pages\ListBulkRepayments::route('/'),
+            'create' => Pages\CreateBulkRepayments::route('/create'),
+            'view' => Pages\ViewBulkRepayments::route('/{record}'),
+            'edit' => Pages\EditBulkRepayments::route('/{record}/edit'),
         ];
     }
 }

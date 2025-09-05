@@ -86,10 +86,10 @@ class ExpenseCategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            Pages\ListExpenseCategories::class,
-            Pages\CreateExpenseCategory::class,
-            Pages\ViewExpenseCategory::class,
-            Pages\EditExpenseCategory::class,
+            'index' => Pages\ListExpenseCategories::route('/'),
+            'create' => Pages\CreateExpenseCategory::route('/create'),
+            'view' => Pages\ViewExpenseCategory::route('/{record}'),
+            'edit' => Pages\EditExpenseCategory::route('/{record}/edit'),
         ];
-    }    
+    }
 }

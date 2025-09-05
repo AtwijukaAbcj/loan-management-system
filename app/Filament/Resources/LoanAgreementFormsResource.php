@@ -91,10 +91,10 @@ class LoanAgreementFormsResource extends Resource
     public static function getPages(): array
     {
         return [
-            Pages\ListLoanAgreementForms::class,
-            Pages\CreateLoanAgreementForms::class,
-            Pages\ViewLoanAgreementForms::class,
-            Pages\EditLoanAgreementForms::class,
+            'index' => Pages\ListLoanAgreementForms::route('/'),
+            'create' => Pages\CreateLoanAgreementForms::route('/create'),
+            'view' => Pages\ViewLoanAgreementForms::route('/{record}'),
+            'edit' => Pages\EditLoanAgreementForms::route('/{record}/edit'),
         ];
     }
 }

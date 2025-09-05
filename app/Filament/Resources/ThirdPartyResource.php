@@ -95,10 +95,10 @@ class ThirdPartyResource extends Resource
     public static function getPages(): array
     {
         return [
-            Pages\ListThirdParties::class,
-            Pages\CreateThirdParty::class,
-            Pages\ViewThirdParty::class,
-            Pages\EditThirdParty::class,
+            'index'  => Pages\ListThirdParties::route('/'),
+            'create' => Pages\CreateThirdParty::route('/create'),
+            'view'   => Pages\ViewThirdParty::route('/{record}'),
+            'edit'   => Pages\EditThirdParty::route('/{record}/edit'),
         ];
     }
 }

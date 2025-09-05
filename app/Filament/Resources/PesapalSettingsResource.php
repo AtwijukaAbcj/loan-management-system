@@ -60,9 +60,9 @@ class PesapalSettingsResource extends Resource
     public static function getPages(): array
     {
         return [
-            Pages\ListPesapalSettings::class,
-            Pages\CreatePesapalSettings::class,
-            Pages\EditPesapalSettings::class,
+            'index'  => Pages\ListPesapalSettings::route('/'),
+            'create' => Pages\CreatePesapalSettings::route('/create'),
+            'edit'   => Pages\EditPesapalSettings::route('/{record}/edit'),
         ];
     }
 }

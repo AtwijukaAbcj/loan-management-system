@@ -64,9 +64,9 @@ class CollateralResource extends Resource
     public static function getPages(): array
     {
         return [
-            Pages\ListCollaterals::class,
-            Pages\CreateCollateral::class,
-            Pages\EditCollateral::class,
+            'index'  => Pages\ListCollaterals::route('/'),
+            'create' => Pages\CreateCollateral::route('/create'),
+            'edit'   => Pages\EditCollateral::route('/{record}/edit'),
         ];
     }
 }

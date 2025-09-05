@@ -283,9 +283,9 @@ class LoanRestructureResource extends Resource
     public static function getPages(): array
     {
         return [
-            Pages\ListLoanRestructures::class,
-            Pages\CreateLoanRestructure::class,
-            Pages\EditLoanRestructure::class,
+            'index' => Pages\ListLoanRestructures::route('/'),
+            'create' => Pages\CreateLoanRestructure::route('/create'),
+            'edit' => Pages\EditLoanRestructure::route('/{record}/edit'),
         ];
     }
 }

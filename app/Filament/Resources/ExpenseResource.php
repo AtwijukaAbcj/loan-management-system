@@ -148,10 +148,10 @@ class ExpenseResource extends Resource
     public static function getPages(): array
     {
         return [
-            Pages\ListExpenses::class,
-            Pages\CreateExpense::class,
-            Pages\ViewExpense::class,
-            Pages\EditExpense::class,
+            'index' => Pages\ListExpenses::route('/'),
+            'create' => Pages\CreateExpense::route('/create'),
+            'view' => Pages\ViewExpense::route('/{record}'),
+            'edit' => Pages\EditExpense::route('/{record}/edit'),
         ];
     }
 }

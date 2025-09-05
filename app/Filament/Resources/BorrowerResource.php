@@ -335,10 +335,10 @@ class BorrowerResource extends Resource {
     public static function getPages(): array
     {
         return [
-            Pages\ListBorrowers::class,
-            Pages\CreateBorrower::class,
-            Pages\EditBorrower::class,
-            Pages\ViewBorrower::class,
+            'index'  => Pages\ListBorrowers::route('/'),
+            'create' => Pages\CreateBorrower::route('/create'),
+            'edit'   => Pages\EditBorrower::route('/{record}/edit'),
+            'view'   => Pages\ViewBorrower::route('/{record}'),
         ];
     }
 

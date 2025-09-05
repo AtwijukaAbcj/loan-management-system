@@ -129,10 +129,10 @@ Contact::all()->mapWithKeys(function($contact) {
     public static function getPages(): array
     {
         return [
-            Pages\ListContactMessages::class,
-            Pages\CreateContactMessages::class,
-            Pages\ViewContactMessages::class,
-            Pages\EditContactMessages::class,
+            'index' => Pages\ListContactMessages::route('/'),
+            'create' => Pages\CreateContactMessages::route('/create'),
+            'view' => Pages\ViewContactMessages::route('/{record}'),
+            'edit' => Pages\EditContactMessages::route('/{record}/edit'),
         ];
     }
 }

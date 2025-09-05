@@ -182,10 +182,10 @@ class LoanTypeResource extends Resource
     public static function getPages(): array
     {
         return [
-            Pages\ListLoanTypes::class,
-            Pages\CreateLoanType::class,
-            Pages\ViewLoanType::class,
-            Pages\EditLoanType::class,
+            'index'  => Pages\ListLoanTypes::route('/'),
+            'create' => Pages\CreateLoanType::route('/create'),
+            'view'   => Pages\ViewLoanType::route('/{record}'),
+            'edit'   => Pages\EditLoanType::route('/{record}/edit'),
         ];
     }
 }
