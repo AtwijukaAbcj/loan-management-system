@@ -36,11 +36,38 @@ class BorrowerResource extends Resource {
             ->columns([
                 Tables\Columns\TextColumn::make('first_name')->label('First Name')->searchable(),
                 Tables\Columns\TextColumn::make('last_name')->label('Last Name')->searchable(),
+                Tables\Columns\TextColumn::make('full_name')->label('Full Name')->searchable(),
+                Tables\Columns\TextColumn::make('gender')->label('Gender'),
+                Tables\Columns\TextColumn::make('dob')->label('Date of Birth')->date(),
+                Tables\Columns\TextColumn::make('occupation')->label('Occupation'),
+                Tables\Columns\TextColumn::make('identification')->label('National ID'),
                 Tables\Columns\TextColumn::make('mobile')->label('Phone')->searchable(),
                 Tables\Columns\TextColumn::make('email')->label('Email')->searchable(),
-                Tables\Columns\TextColumn::make('identification')->label('National ID'),
-                Tables\Columns\TextColumn::make('dob')->label('Date of Birth')->date(),
-                Tables\Columns\TextColumn::make('gender')->label('Gender'),
+                Tables\Columns\TextColumn::make('address')->label('Address'),
+                Tables\Columns\TextColumn::make('city')->label('City'),
+                Tables\Columns\TextColumn::make('province')->label('Province'),
+                Tables\Columns\TextColumn::make('zipcode')->label('Zipcode'),
+                Tables\Columns\TextColumn::make('next_of_kin_first_name')->label('Next of Kin First Name'),
+                Tables\Columns\TextColumn::make('next_of_kin_last_name')->label('Next of Kin Last Name'),
+                Tables\Columns\TextColumn::make('phone_next_of_kin')->label('Phone Next of Kin'),
+                Tables\Columns\TextColumn::make('address_next_of_kin')->label('Address Next of Kin'),
+                Tables\Columns\TextColumn::make('relationship_next_of_kin')->label('Relationship to Next of Kin'),
+                Tables\Columns\TextColumn::make('bank_name')->label('Bank Name'),
+                Tables\Columns\TextColumn::make('bank_branch')->label('Bank Branch'),
+                Tables\Columns\TextColumn::make('bank_sort_code')->label('Bank Sort Code'),
+                Tables\Columns\TextColumn::make('bank_account_number')->label('Bank Account Number'),
+                Tables\Columns\TextColumn::make('bank_account_name')->label('Bank Account Name'),
+                Tables\Columns\TextColumn::make('mobile_money_name')->label('Mobile Money Name'),
+                Tables\Columns\TextColumn::make('mobile_money_number')->label('Mobile Money Number'),
+                Tables\Columns\TextColumn::make('created_at')->label('Created')->dateTime(),
+            ])
+            ->actions([
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make(),
             ])
             ->defaultSort('created_at', 'desc');
     }
