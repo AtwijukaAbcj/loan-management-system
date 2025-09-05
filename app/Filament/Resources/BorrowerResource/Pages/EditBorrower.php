@@ -18,8 +18,13 @@ class EditBorrower extends EditRecord
         // Remove old collaterals for this borrower
         \App\Models\Collateral::where('borrower_id', $record->id)->delete();
         foreach ($collateralItems as $item) {
+            if (empty($item['loan_id'])) {
+                // Skip or handle error if loan_id is missing
+                continue;
+            }
             $collateral = new \App\Models\Collateral();
             $collateral->borrower_id = $record->id;
+            $collateral->loan_id = $item['loan_id'];
             $collateral->collateral_name = $item['collateral_name'] ?? null;
             $collateral->item_value = $item['item_value'] ?? null;
             $collateral->item_type = $item['item_type'] ?? null;
