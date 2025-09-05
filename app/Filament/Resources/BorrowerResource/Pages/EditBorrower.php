@@ -9,6 +9,8 @@ use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditBorrower extends EditRecord
+{
+
     protected function afterSave(): void
     {
         $record = $this->record;
@@ -25,7 +27,6 @@ class EditBorrower extends EditRecord
             $collateral->save();
         }
     }
-{
     protected static string $resource = BorrowerResource::class;
     protected function handleRecordUpdate(Model $record, array $data): Model
     {

@@ -9,6 +9,8 @@ use Filament\Resources\Pages\CreateRecord;
 
 
 class CreateBorrower extends CreateRecord
+{
+
     protected function afterCreate(): void
     {
         $record = $this->record;
@@ -23,7 +25,6 @@ class CreateBorrower extends CreateRecord
             $collateral->save();
         }
     }
-{
     protected static string $resource = BorrowerResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array
