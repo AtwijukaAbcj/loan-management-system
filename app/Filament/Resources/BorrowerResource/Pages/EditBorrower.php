@@ -30,10 +30,10 @@ class EditBorrower extends EditRecord
     protected static string $resource = BorrowerResource::class;
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        $data['full_name'] = $data['first_name'] . ' ' . $data['last_name'] . ' - ' . $data['mobile'];
-        $record->update($data);
-
-        return $record;
+    $data['full_name'] = $data['first_name'] . ' ' . $data['last_name'] . ' - ' . $data['mobile'];
+    unset($data['collateral_items']);
+    $record->update($data);
+    return $record;
     }
     protected function getHeaderActions(): array
     {

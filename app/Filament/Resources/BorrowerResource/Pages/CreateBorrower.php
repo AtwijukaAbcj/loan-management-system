@@ -30,9 +30,10 @@ class CreateBorrower extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         
-       $data['full_name'] = $data['first_name']. ' '.$data['last_name']. ' - '.$data['mobile'];
-       $data['added_by'] =Auth::user()->id;
-       return $data;
+    $data['full_name'] = $data['first_name']. ' '.$data['last_name']. ' - '.$data['mobile'];
+    $data['added_by'] =Auth::user()->id;
+    unset($data['collateral_items']);
+    return $data;
     }
 
 
