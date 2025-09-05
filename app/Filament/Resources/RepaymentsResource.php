@@ -146,10 +146,10 @@ class RepaymentsResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListRepayments::route('/'),
-            'create' => Pages\CreateRepayments::route('/create'),
-            'view' => Pages\ViewRepayments::route('/{record}'),
-            'edit' => Pages\EditRepayments::route('/{record}/edit'),
+            Pages\ListRepayments::class,
+            Pages\CreateRepayments::class,
+            Pages\ViewRepayments::class,
+            Pages\EditRepayments::class,
         ];
     }
 }

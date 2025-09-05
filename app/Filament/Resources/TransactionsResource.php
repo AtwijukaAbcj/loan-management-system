@@ -101,10 +101,10 @@ class TransactionsResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTransactions::route('/'),
-            'create' => Pages\CreateTransactions::route('/create'),
-            'view' => Pages\ViewTransactions::route('/{record}'),
-            'edit' => Pages\EditTransactions::route('/{record}/edit'),
+            Pages\ListTransactions::class,
+            Pages\CreateTransactions::class,
+            Pages\ViewTransactions::class,
+            Pages\EditTransactions::class,
         ];
     }
 }

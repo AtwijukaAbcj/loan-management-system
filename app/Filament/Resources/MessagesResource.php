@@ -119,10 +119,10 @@ public static function table(Table $table): Table
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListMessages::route('/'),
-            'create' => Pages\CreateMessages::route('/create'),
-            'view' => Pages\ViewMessages::route('/{record}'),
-            'edit' => Pages\EditMessages::route('/{record}/edit'),
+            Pages\ListMessages::class,
+            Pages\CreateMessages::class,
+            Pages\ViewMessages::class,
+            Pages\EditMessages::class,
         ];
     }
 }

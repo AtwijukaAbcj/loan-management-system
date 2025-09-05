@@ -87,10 +87,10 @@ class LoanSettlementFormsResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListLoanSettlementForms::route('/'),
-            'create' => Pages\CreateLoanSettlementForms::route('/create'),
-            'view' => Pages\ViewLoanSettlementForms::route('/{record}'),
-            'edit' => Pages\EditLoanSettlementForms::route('/{record}/edit'),
+            Pages\ListLoanSettlementForms::class,
+            Pages\CreateLoanSettlementForms::class,
+            Pages\ViewLoanSettlementForms::class,
+            Pages\EditLoanSettlementForms::class,
         ];
     }    
 }

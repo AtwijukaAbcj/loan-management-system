@@ -82,10 +82,10 @@ class SwitchBranchResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSwitchBranches::route('/'),
-            'create' => Pages\CreateSwitchBranch::route('/create'),
-            'view' => Pages\ViewSwitchBranch::route('/{record}'),
-            'edit' => Pages\EditSwitchBranch::route('/{record}/edit'),
+            Pages\ListSwitchBranches::class,
+            Pages\CreateSwitchBranch::class,
+            Pages\ViewSwitchBranch::class,
+            Pages\EditSwitchBranch::class,
         ];
     }
 }

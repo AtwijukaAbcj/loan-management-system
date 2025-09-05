@@ -136,9 +136,9 @@ class LoanRollOverResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListLoanRollOvers::route('/'),
-            'create' => Pages\CreateLoanRollOver::route('/create'),
-            'edit' => Pages\EditLoanRollOver::route('/{record}/edit'),
+            Pages\ListLoanRollOvers::class,
+            Pages\CreateLoanRollOver::class,
+            Pages\EditLoanRollOver::class,
         ];
     }
 }

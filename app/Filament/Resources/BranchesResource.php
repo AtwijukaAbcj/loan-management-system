@@ -124,10 +124,10 @@ class BranchesResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBranches::route('/'),
-            'create' => Pages\CreateBranches::route('/create'),
-            'view' => Pages\ViewBranches::route('/{record}'),
-            'edit' => Pages\EditBranches::route('/{record}/edit'),
+            Pages\ListBranches::class,
+            Pages\CreateBranches::class,
+            Pages\ViewBranches::class,
+            Pages\EditBranches::class,
         ];
     }
 }
