@@ -1,3 +1,20 @@
+// Pesapal Settings UI
+use Illuminate\Http\Request;
+Route::get('/settings/pesapal', function () {
+    // Load keys from .env or config
+    $consumer_key = env('PESAPAL_CONSUMER_KEY');
+    $consumer_secret = env('PESAPAL_CONSUMER_SECRET');
+    return view('settings.pesapal', compact('consumer_key', 'consumer_secret'));
+})->name('settings.pesapal');
+
+Route::post('/settings/pesapal/save', function (Request $request) {
+    // Save keys to .env (for demo, just show values)
+    // In production, use a settings table or package
+    $consumer_key = $request->input('consumer_key');
+    $consumer_secret = $request->input('consumer_secret');
+    // TODO: Save to persistent storage
+    return back()->with(['success' => 'Pesapal keys saved!', 'consumer_key' => $consumer_key, 'consumer_secret' => $consumer_secret]);
+})->name('settings.pesapal.save');
 // Pesapal Repayment Payment
 Route::get('/repayment/{amount}', function ($amount) {
     return view('gateways.pesapal.repaymentPayments', ['amount' => decrypt($amount)]);
