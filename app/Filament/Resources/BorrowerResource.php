@@ -82,4 +82,20 @@ class BorrowerResource extends Resource
         ]);
     }
 
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListBorrowers::route('/'),
+            'create' => Pages\CreateBorrower::route('/create'),
+            'view' => Pages\ViewBorrower::route('/{record}'),
+            'edit' => Pages\EditBorrower::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            // Add relation managers here if needed
+        ];
+    }
 }
