@@ -21,6 +21,20 @@ class RoleResource extends Resource
     {
         return $form->schema([
             Forms\Components\TextInput::make('name')->required()->maxLength(255),
+            Forms\Components\Select::make('permissions')
+                ->label('Permissions')
+                ->multiple()
+                ->preload()
+                ->relationship('permissions', 'name')
+                ->searchable(),
+            Forms\Components\TextInput::make('organization_id')
+                ->label('Organization ID')
+                ->numeric()
+                ->required(),
+            Forms\Components\TextInput::make('branch_id')
+                ->label('Branch ID')
+                ->numeric()
+                ->required(),
         ]);
     }
 
