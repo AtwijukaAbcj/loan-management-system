@@ -29,8 +29,200 @@ use Filament\Support\Enums\FontWeight;
 
 
 
-class BorrowerResource extends Resource
-{
+class BorrowerResource extends Resource {
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\TextInput::make('first_name')
+                    ->label('First Name')
+                    ->prefixIcon('heroicon-o-user')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('last_name')
+                    ->label('Last Name')
+                    ->prefixIcon('heroicon-o-user')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('full_name')
+                    ->hidden(),
+                Forms\Components\Select::make('gender')
+                    ->label('Gender')
+                    ->prefixIcon('heroicon-o-users')
+                    ->options([
+                        'male' => 'Male',
+                        'female' => 'Female',
+                    ])
+                    ->required(),
+                Forms\Components\DatePicker::make('dob')
+                    ->label('Date of Birth')
+                    ->prefixIcon('heroicon-o-calendar')
+                    ->required()
+                    ->native(false)
+                    ->maxDate(now()),
+                Forms\Components\Select::make('occupation')
+                    ->options([
+                        'employed' => 'Employed',
+                        'self employed' => 'Self Employed',
+                        'unemployed' => 'Un-Employed',
+                        'student' => 'Student',
+                    ])
+                    ->prefixIcon('heroicon-o-briefcase')
+                    ->required(),
+                Forms\Components\TextInput::make('identification')
+                    ->label('National ID')
+                    ->prefixIcon('heroicon-o-identification')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('mobile')
+                    ->label('Phone number')
+                    ->prefixIcon('heroicon-o-phone')
+                    ->tel()
+                    ->required(),
+                Forms\Components\TextInput::make('email')
+                    ->label('Email address')
+                    ->prefixIcon('heroicon-o-envelope')
+                    ->email()
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Textarea::make('address')
+                    ->label('Address')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('city')
+                    ->label('City')
+                    ->prefixIcon('fas-map-marker')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('province')
+                    ->label('Province')
+                    ->prefixIcon('fas-map-marker')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('zipcode')
+                    ->label('Zipcode')
+                    ->prefixIcon('fas-map-marker')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('next_of_kin_first_name')
+                    ->label('Next of Kin First Name')
+                    ->prefixIcon('fas-user')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('next_of_kin_last_name')
+                    ->label('Next of Kin Last Name')
+                    ->prefixIcon('fas-users')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('phone_next_of_kin')
+                    ->label('Phone Next of Kin')
+                    ->prefixIcon('heroicon-o-phone')
+                    ->tel(),
+                Forms\Components\Textarea::make('address_next_of_kin')
+                    ->maxLength(255),
+                Forms\Components\Select::make('relationship_next_of_kin')
+                    ->label('Relationship to Next of Kin')
+                    ->options([
+                        'mom' => 'Mom',
+                        'father' => 'Father',
+                        'aunty' => 'Aunty',
+                        'uncle' => 'Uncle',
+                        'cousin' => 'Cousin',
+                        'wife' => 'Wife',
+                        'husband' => 'Husband',
+                        'brother' => 'Brother',
+                        'Sister' => 'Sister',
+                    ]),
+                Forms\Components\TextInput::make('bank_name')
+                    ->label('Bank Name')
+                    ->prefixIcon('fas-building')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('bank_branch')
+                    ->label('Bank Branch')
+                    ->prefixIcon('fas-building')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('bank_sort_code')
+                    ->label('Bank Sort Code')
+                    ->prefixIcon('fas-building')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('bank_account_number')
+                    ->label('Bank Account Number')
+                    ->prefixIcon('fas-dollar-sign')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('bank_account_name')
+                    ->label('Bank Account Name')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('mobile_money_name')
+                    ->label('Mobile Money Name')
+                    ->prefixIcon('fas-phone')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('mobile_money_number')
+                    ->label('Mobile Money Number')
+                    ->prefixIcon('fas-user')
+                    ->tel(),
+                SpatieMediaLibraryFileUpload::make('payslips')
+                    ->disk('borrowers')
+                    ->collection('payslips')
+                    ->visibility('public')
+                    ->multiple()
+                    ->minFiles(0)
+                    ->maxFiles(10)
+                    ->maxSize(5120)
+                    ->columnSpan(2)
+                    ->openable(),
+                SpatieMediaLibraryFileUpload::make('bank_statements')
+                    ->disk('borrowers')
+                    ->collection('bank_statements')
+                    ->visibility('public')
+                    ->multiple()
+                    ->minFiles(0)
+                    ->maxFiles(10)
+                    ->maxSize(5120)
+                    ->columnSpan(2)
+                    ->openable(),
+                SpatieMediaLibraryFileUpload::make('nrc')
+                    ->disk('borrowers')
+                    ->collection('nrc')
+                    ->visibility('public')
+                    ->maxSize(5120)
+                    ->columnSpan(2)
+                    ->openable(),
+                SpatieMediaLibraryFileUpload::make('preapproval_letter')
+                    ->disk('borrowers')
+                    ->collection('preapproval_letter')
+                    ->visibility('public')
+                    ->minFiles(0)
+                    ->maxSize(5120)
+                    ->columnSpan(2)
+                    ->openable(),
+                SpatieMediaLibraryFileUpload::make('proof_of_residence')
+                    ->disk('borrowers')
+                    ->collection('proof_of_residence')
+                    ->visibility('public')
+                    ->minFiles(0)
+                    ->maxSize(5120)
+                    ->columnSpan(2)
+                    ->openable(),
+                Forms\Components\Repeater::make('collateral_items')
+                    ->label('Collateral Items')
+                    ->schema([
+                        Forms\Components\TextInput::make('collateral_name')
+                            ->label('Collateral Name')
+                            ->required(),
+                        Forms\Components\TextInput::make('item_value')
+                            ->label('Market Value (UGX)')
+                            ->numeric(),
+                        Forms\Components\TextInput::make('item_type')
+                            ->label('Type'),
+                        SpatieMediaLibraryFileUpload::make('collateral_image')
+                            ->disk('borrowers')
+                            ->collection('collaterals')
+                            ->visibility('public')
+                            ->maxSize(5120)
+                            ->openable(),
+                    ])
+                    ->minItems(0)
+                    ->maxItems(10)
+                    ->columnSpan(2),
+            ]);
+    }
     protected static ?string $model = Borrower::class;
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $navigationLabel = 'Borrowers';
