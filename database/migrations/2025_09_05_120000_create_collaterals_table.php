@@ -9,7 +9,8 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('loan_id');
             $table->unsignedBigInteger('borrower_id');
-            $table->string('item_description');
+            $table->string('collateral_name');
+            $table->string('item_description')->nullable();
             $table->decimal('item_value', 12, 2)->nullable();
             $table->string('item_type')->nullable();
             $table->string('document_path')->nullable();

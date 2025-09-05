@@ -9,6 +9,20 @@ use Filament\Resources\Pages\CreateRecord;
 
 
 class CreateBorrower extends CreateRecord
+    protected function afterCreate(): void
+    {
+        $record = $this->record;
+        $collateralItems = $this->data['collateral_items'] ?? [];
+        foreach ($collateralItems as $item) {
+            $collateral = new \App\Models\Collateral();
+            $collateral->borrower_id = $record->id;
+            $collateral->collateral_name = $item['collateral_name'] ?? null;
+            $collateral->item_value = $item['item_value'] ?? null;
+            $collateral->item_type = $item['item_type'] ?? null;
+            $collateral->document_path = $item['collateral_image'][0]['file_name'] ?? null;
+            $collateral->save();
+        }
+    }
 {
     protected static string $resource = BorrowerResource::class;
 

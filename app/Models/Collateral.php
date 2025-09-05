@@ -6,6 +6,7 @@ class Collateral extends Model
     protected $fillable = [
         'loan_id',
         'borrower_id',
+        'collateral_name',
         'item_description',
         'item_value',
         'item_type',

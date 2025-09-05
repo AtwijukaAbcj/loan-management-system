@@ -537,16 +537,27 @@ class BorrowerResource extends Resource
                     ->maxSize(5120)
                     ->columnSpan(2)
                     ->openable(),
-                SpatieMediaLibraryFileUpload::make('collaterals')
-                    ->disk('borrowers')
-                    ->multiple()
-                    ->minFiles(0)
-                    ->maxFiles(10)
-                    ->collection('collaterals')
-                    ->visibility('public')
-                    ->maxSize(5120)
-                    ->columnSpan(2)
-                    ->openable(),
+                Forms\Components\Repeater::make('collateral_items')
+                    ->label('Collateral Items')
+                    ->schema([
+                        Forms\Components\TextInput::make('collateral_name')
+                            ->label('Collateral Name')
+                            ->required(),
+                        Forms\Components\TextInput::make('item_value')
+                            ->label('Market Value (UGX)')
+                            ->numeric(),
+                        Forms\Components\TextInput::make('item_type')
+                            ->label('Type'),
+                        SpatieMediaLibraryFileUpload::make('collateral_image')
+                            ->disk('borrowers')
+                            ->collection('collaterals')
+                            ->visibility('public')
+                            ->maxSize(5120)
+                            ->openable(),
+                    ])
+                    ->minItems(0)
+                    ->maxItems(10)
+                    ->columnSpan(2),
 
 
 
