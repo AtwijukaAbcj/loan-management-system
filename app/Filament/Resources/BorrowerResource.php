@@ -81,3 +81,5 @@ class BorrowerResource extends Resource
             // ...other sections as needed...
         ]);
     }
+
+}
