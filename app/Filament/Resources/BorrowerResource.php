@@ -30,6 +30,20 @@ use Filament\Support\Enums\FontWeight;
 
 
 class BorrowerResource extends Resource {
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                Tables\Columns\TextColumn::make('first_name')->label('First Name')->searchable(),
+                Tables\Columns\TextColumn::make('last_name')->label('Last Name')->searchable(),
+                Tables\Columns\TextColumn::make('mobile')->label('Phone')->searchable(),
+                Tables\Columns\TextColumn::make('email')->label('Email')->searchable(),
+                Tables\Columns\TextColumn::make('identification')->label('National ID'),
+                Tables\Columns\TextColumn::make('dob')->label('Date of Birth')->date(),
+                Tables\Columns\TextColumn::make('gender')->label('Gender'),
+            ])
+            ->defaultSort('created_at', 'desc');
+    }
     public static function form(Form $form): Form
     {
         return $form
