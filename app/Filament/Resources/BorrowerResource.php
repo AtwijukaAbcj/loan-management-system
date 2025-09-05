@@ -277,7 +277,31 @@ class BorrowerResource extends Resource {
                 ->description('Borrower Personal Details')
                 ->icon('heroicon-o-user-circle')
                 ->schema([
-                    // ...existing personal details code...
+                    TextEntry::make('first_name')->label('First Name'),
+                    TextEntry::make('last_name')->label('Last Name'),
+                    TextEntry::make('full_name')->label('Full Name'),
+                    TextEntry::make('gender')->label('Gender'),
+                    TextEntry::make('dob')->label('Date of Birth'),
+                    TextEntry::make('occupation')->label('Occupation'),
+                    TextEntry::make('identification')->label('National ID'),
+                    TextEntry::make('mobile')->label('Phone'),
+                    TextEntry::make('email')->label('Email'),
+                    TextEntry::make('address')->label('Address'),
+                    TextEntry::make('city')->label('City'),
+                    TextEntry::make('province')->label('Province'),
+                    TextEntry::make('zipcode')->label('Zipcode'),
+                    TextEntry::make('next_of_kin_first_name')->label('Next of Kin First Name'),
+                    TextEntry::make('next_of_kin_last_name')->label('Next of Kin Last Name'),
+                    TextEntry::make('phone_next_of_kin')->label('Phone Next of Kin'),
+                    TextEntry::make('address_next_of_kin')->label('Address Next of Kin'),
+                    TextEntry::make('relationship_next_of_kin')->label('Relationship to Next of Kin'),
+                    TextEntry::make('bank_name')->label('Bank Name'),
+                    TextEntry::make('bank_branch')->label('Bank Branch'),
+                    TextEntry::make('bank_sort_code')->label('Bank Sort Code'),
+                    TextEntry::make('bank_account_number')->label('Bank Account Number'),
+                    TextEntry::make('bank_account_name')->label('Bank Account Name'),
+                    TextEntry::make('mobile_money_name')->label('Mobile Money Name'),
+                    TextEntry::make('mobile_money_number')->label('Mobile Money Number'),
                 ]),
             Section::make('Collateral Details')
                 ->description('All collateral items for this borrower')
