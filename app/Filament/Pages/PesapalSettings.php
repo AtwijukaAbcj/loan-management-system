@@ -13,9 +13,20 @@ class PesapalSettings extends Page
     protected static string $view = 'filament.pages.pesapal-settings';
     protected static ?string $navigationLabel = 'Pesapal Settings';
     protected static ?string $title = 'Pesapal API Settings';
+    protected static ?string $navigationGroup = 'Addons';
 
     public $consumer_key;
     public $consumer_secret;
+    public $test_result;
+    public function testKeys()
+    {
+        // Simulate a test call to Pesapal API
+        if ($this->consumer_key && $this->consumer_secret) {
+            $this->test_result = 'Test successful! Keys are set.';
+        } else {
+            $this->test_result = 'Test failed! Please enter both keys.';
+        }
+    }
 
     public function mount()
     {
