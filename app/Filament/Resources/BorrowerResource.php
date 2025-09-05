@@ -83,22 +83,6 @@ class BorrowerResource extends Resource
     }
     // ...existing code...
 }
-    // ...existing code...
-{
-                                                    ->outlined()
-                                                    ->color('primary'),
-                                                Action::make('view_' . $media->id)
-                                                    ->label('View Bank Statement')
-                                                    ->icon('heroicon-o-eye')
-                                                    ->url($media->getUrl())
-                                                    ->openUrlInNewTab()
-                                                    ->outlined()
-                                                    ->color('secondary'),
-                                            ];
-                                        })->toArray()
-                                    )
-                                ),
-                                Actions::make(
                                     array_merge(
                                         ...$borrower->getMedia('nrc')->map(function ($media) {
                                             return [
