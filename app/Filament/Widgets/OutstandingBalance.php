@@ -10,13 +10,12 @@ use Carbon\CarbonImmutable;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Illuminate\Database\Eloquent\Builder;
-use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
+
 
 
 class OutstandingBalance extends BarChartWidget
 {
     use InteractsWithPageFilters;
-    use HasWidgetShield;
   
     protected static ?int $sort = 3;
 
