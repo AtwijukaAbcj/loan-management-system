@@ -16,9 +16,15 @@ class CollateralResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
+            Forms\Components\Select::make('borrower_id')
+                ->relationship('borrower', 'full_name')
+                ->label('Borrower')
+                ->searchable()
+                ->required(),
             Forms\Components\Select::make('loan_id')
                 ->relationship('loan', 'id')
                 ->label('Loan')
+                ->searchable()
                 ->required(),
             Forms\Components\TextInput::make('item_description')
                 ->label('Description')
@@ -26,10 +32,11 @@ class CollateralResource extends Resource
             Forms\Components\TextInput::make('item_type')
                 ->label('Type'),
             Forms\Components\TextInput::make('item_value')
-                ->label('Estimated Value (UGX)')
+                ->label('Market Value (UGX)')
                 ->numeric(),
             Forms\Components\FileUpload::make('document_path')
-                ->label('Document')
+                ->label('Collateral Image')
+                ->image()
                 ->directory('collateral_docs')
                 ->preserveFilenames(),
         ]);
@@ -37,11 +44,12 @@ class CollateralResource extends Resource
     public static function table(Table $table): Table
     {
         return $table->columns([
+            Tables\Columns\TextColumn::make('borrower.full_name')->label('Borrower'),
             Tables\Columns\TextColumn::make('loan_id')->label('Loan'),
             Tables\Columns\TextColumn::make('item_description')->label('Description'),
             Tables\Columns\TextColumn::make('item_type')->label('Type'),
-            Tables\Columns\TextColumn::make('item_value')->label('Value'),
-            Tables\Columns\TextColumn::make('document_path')->label('Document'),
+            Tables\Columns\TextColumn::make('item_value')->label('Market Value'),
+            Tables\Columns\ImageColumn::make('document_path')->label('Collateral Image'),
         ])->actions([
             Tables\Actions\EditAction::make(),
             Tables\Actions\DeleteAction::make(),

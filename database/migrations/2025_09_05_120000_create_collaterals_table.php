@@ -8,12 +8,14 @@ return new class extends Migration {
         Schema::create('collaterals', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('loan_id');
+            $table->unsignedBigInteger('borrower_id');
             $table->string('item_description');
             $table->decimal('item_value', 12, 2)->nullable();
             $table->string('item_type')->nullable();
             $table->string('document_path')->nullable();
             $table->timestamps();
             $table->foreign('loan_id')->references('id')->on('loans')->onDelete('cascade');
+            $table->foreign('borrower_id')->references('id')->on('borrowers')->onDelete('cascade');
         });
     }
     public function down(): void
