@@ -302,7 +302,7 @@ class BorrowerResource extends Resource {
                 ]),
             Section::make('Collateral Details')
                 ->schema(
-                    \App\Models\Collateral::where('borrower_id', $borrower->id)->get()->map(function ($collateral) use ($borrower) {
+                    $borrower->collaterals->map(function ($collateral) {
                         return [
                             TextEntry::make('collateral_name')->label('Collateral Name')->default($collateral->collateral_name ?? '-')->icon('heroicon-o-archive-box'),
                             TextEntry::make('item_value')->label('Market Value (UGX)')->default($collateral->item_value ?? '-')->icon('heroicon-o-currency-dollar'),
