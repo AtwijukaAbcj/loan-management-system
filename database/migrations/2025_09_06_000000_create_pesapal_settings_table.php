@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pesapal_settings', function (Blueprint $table) {
-            $table->id();
-            $table->string('consumer_key')->nullable();
-            $table->string('consumer_secret')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('pesapal_settings')) {
+            Schema::create('pesapal_settings', function (Blueprint $table) {
+                $table->id();
+                $table->string('consumer_key')->nullable();
+                $table->string('consumer_secret')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**
