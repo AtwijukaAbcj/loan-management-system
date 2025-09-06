@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Filament\Pages;
+use Filament\Pages\Page;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
 use Filament\Facades\Filament;
