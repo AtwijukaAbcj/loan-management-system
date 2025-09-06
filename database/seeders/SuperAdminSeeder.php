@@ -2,35 +2,51 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class SuperAdminSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Find the first user (customize as needed)
-        $user = User::first();
-        if (!$user) {
-            $this->command->error('No users found. Please create a user first.');
-            return;
+        // 1) Create / update the user
+        $email = env('SUPER_ADMIN_EMAIL', 'solichsystems.com');
+        $password = env('SUPER_ADMIN_PASSWORD', 'admin123!');
+
+        $user = User::updateOrCreate(
+            ['email' => $email],
+            [
+                'name' => 'Super Admin',
+                'password' => Hash::make($password),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        // 2) Ensure a Super Admin role exists (Spatie/Permission)
+        //    Use the same guard as your User model (usually "web")
+        $role = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+
+        // 3) Make sure all permissions exist (Shield usually generates these)
+        //    Then give the role every permission
+        $permissions = Permission::pluck('name')->all();
+        if (!empty($permissions)) {
+            $role->syncPermissions($permissions);
         }
 
-    // Create the super_admin role if it doesn't exist
-    $role = Role::firstOrCreate(['name' => 'super_admin']);
+        // 4) Assign the role to the user
+        if (!$user->hasRole($role->name)) {
+            $user->assignRole($role->name);
+        }
 
-    // Assign all permissions to the super_admin role
-    $permissions = \Spatie\Permission\Models\Permission::all();
-    foreach ($permissions as $permission) {
-        $role->givePermissionTo($permission);
-    }
+        // Optional: if your app checks a boolean like `is_admin`
+        if ($user->isFillable('is_admin') || \Schema::hasColumn($user->getTable(), 'is_admin')) {
+            $user->forceFill(['is_admin' => true])->save();
+        }
 
-    // Assign the role to the user
-    $user->assignRole($role);
-    $this->command->info('Super admin role assigned to user: ' . $user->email . ' with all permissions.');
+        $this->command->info('Super admin role assigned to user: '.$email.' with all permissions.');
+        $this->command->warn('Login with: '.$email.' / '.$password.' (or set SUPER_ADMIN_EMAIL/PASSWORD in .env)');
     }
 }
