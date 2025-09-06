@@ -42,8 +42,8 @@ class Borrower extends Model implements HasMedia
         'city',
         'province',
         'zipcode',
-        'added_by'
-
+        'added_by',
+        'disabled', // Indicates if the borrower is disabled
     ];
 
 
