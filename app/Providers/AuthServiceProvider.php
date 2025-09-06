@@ -15,7 +15,6 @@ use App\Models\Borrower;
 use App\Models\ExpenseCategory;
 use App\Models\Expense;
 use App\Models\Loan;
-use App\Models\LoanSettlement;
 use App\Models\LoanSettlementForms;
 use App\Models\LoanType;
 use App\Models\Messages;
@@ -73,7 +72,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        // Super-admin bypass: can "do everything" across the app & Filament
+        // Super-admin bypass: user sees/does everything (Filament + app policies).
         Gate::before(function ($user, string $ability) {
             // Spatie\Permission
             if (method_exists($user, 'hasRole') && $user->hasRole('super_admin')) {
@@ -90,7 +89,7 @@ class AuthServiceProvider extends ServiceProvider
                 return true;
             }
 
-            return null; // fall back to normal policies
+            return null; // fall back to normal checks
         });
     }
 }

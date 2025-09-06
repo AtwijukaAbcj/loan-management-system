@@ -2,14 +2,16 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\Register;
+use App\Http\Middleware\CheckSubscriptionValidity;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Filament\Http\Middleware\Authenticate;
+use Filament\Http\Middleware\DisableBladeIconComponents;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Http\Middleware\Authenticate;
-use Filament\Http\Middleware\DisableBladeIconComponents;
-use Filament\Http\Middleware\DispatchServingFilamentEvent;
-
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -17,11 +19,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-
-use App\Http\Middleware\CheckSubscriptionValidity;
-use App\Filament\Pages\Auth\Register;
-
-use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Rmsramos\Activitylog\ActivitylogPlugin;
 
 class AdminPanelProvider extends PanelProvider
@@ -46,28 +43,23 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Amber,
             ])
 
-            // Register resources/pages/widgets automatically
+            // Auto-register resources/pages/widgets
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
 
-            // (Optional) also list any resources you want to be sure are present
-            // ->resources([
-            //     \App\Filament\Resources\LoanResource::class,
-            //     // ...etc
-            // ])
-
+            // Add the default dashboard
             ->pages([
                 Pages\Dashboard::class,
             ])
 
-            // Plugins (optional, but recommended if you use them)
+            // Plugins (no ->superAdmin() here)
             ->plugins([
-                FilamentShieldPlugin::make()->superAdmin('super_admin'),
+                FilamentShieldPlugin::make(),
                 ActivitylogPlugin::make(),
             ])
 
-            // Global middleware for Filament
+            // Global middleware
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
