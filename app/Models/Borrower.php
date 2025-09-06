@@ -13,6 +13,10 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Borrower extends Model implements HasMedia
 {
+    public function collaterals()
+    {
+        return $this->hasMany(\App\Models\Collateral::class, 'borrower_id');
+    }
     use HasFactory;
     use InteractsWithMedia;
     use Notifiable;
