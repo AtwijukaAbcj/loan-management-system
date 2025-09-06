@@ -1,6 +1,6 @@
 <?php
 
-namespace Filament\Pages;
+namespace App\Filament\Pages;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
 use Filament\Facades\Filament;
@@ -15,7 +15,7 @@ use Filament\Pages\Dashboard\Concerns\HasFiltersAction;
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use App\Models\Branches;
 
-class Dashboard extends Page
+class MainDashboard extends Page
 {
     //use HasPageShield;
     protected static string $routePath = '/';
