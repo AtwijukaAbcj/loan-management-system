@@ -58,9 +58,8 @@ class RoleResource extends Resource implements HasShieldPermissions
                                                     ->maxLength(255),
                                                 Forms\Components\TextInput::make('guard_name')
                                                     ->label(__('filament-shield::filament-shield.field.guard_name'))
-                                                    ->default(Utils::getFilamentAuthGuard())
-                                                    ->nullable()
-                                                    ->maxLength(255),
+                                                    ->default('web')
+                                                    ->hidden(),
                                                 Forms\Components\Select::make(config('permission.column_names.team_foreign_key'))
                                                     ->label(__('filament-shield::filament-shield.field.team'))
                                                     ->placeholder(__('filament-shield::filament-shield.field.team.placeholder'))
