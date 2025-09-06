@@ -82,4 +82,4 @@ class SuperAdminSeeder extends Seeder
         $this->command->info('Super admin role assigned to user: '.$email.' with all permissions.');
         $this->command->warn('Login with: '.$email.' / '.$password.' (or set SUPER_ADMIN_EMAIL/PASSWORD in .env)');
     }
-}
+} 
