@@ -1,10 +1,10 @@
 <?php
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
 class SuperAdminSeeder extends Seeder
 {
@@ -13,25 +13,24 @@ class SuperAdminSeeder extends Seeder
      */
     public function run(): void
     {
-        // Get all users you want to make super admins
-        // Example: all users with email containing 'admin' or customize as needed
-        // $users = User::where('email', 'like', '%admin%')->get();
-
-        // Or simply assign to all users:
-        $users = User::all();
-
-        // Create the super_admin role if it doesn't exist
-        $role = Role::firstOrCreate(['name' => 'super_admin']);
-
-        // Assign all permissions to the super_admin role
-        $permissions = Permission::all();
-        $role->syncPermissions($permissions);
-
-        // Assign the role to all selected users
-        foreach ($users as $user) {
-            $user->assignRole($role);
+        // Find the first user (customize as needed)
+        $user = User::first();
+        if (!$user) {
+            $this->command->error('No users found. Please create a user first.');
+            return;
         }
 
-        $this->command->info('Super admin role and all permissions assigned to all users.');
+    // Create the super_admin role if it doesn't exist
+    $role = Role::firstOrCreate(['name' => 'super_admin']);
+
+    // Assign all permissions to the super_admin role
+    $permissions = \Spatie\Permission\Models\Permission::all();
+    foreach ($permissions as $permission) {
+        $role->givePermissionTo($permission);
+    }
+
+    // Assign the role to the user
+    $user->assignRole($role);
+    $this->command->info('Super admin role assigned to user: ' . $user->email . ' with all permissions.');
     }
 }
