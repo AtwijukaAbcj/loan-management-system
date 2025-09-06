@@ -40,47 +40,62 @@ class RoleResource extends Resource implements HasShieldPermissions
     {
         return $form
             ->schema([
-                Forms\Components\Grid::make()
-                    ->schema([
-                        Forms\Components\Section::make()
+                Forms\Components\Tabs::make('RoleTabs')
+                    ->tabs([
+                        Forms\Components\Tabs\Tab::make('Details')
                             ->schema([
-                                Forms\Components\TextInput::make('name')
-                                    ->label(__('filament-shield::filament-shield.field.name'))
-                                    ->unique(
-                                        ignoreRecord: true, /** @phpstan-ignore-next-line */
-                                        modifyRuleUsing: fn (Unique $rule) => Utils::isTenancyEnabled() ? $rule->where(Utils::getTenantModelForeignKey(), Filament::getTenant()?->id) : $rule
-                                    )
-                                    ->required()
-                                    ->maxLength(255),
-
-                                Forms\Components\TextInput::make('guard_name')
-                                    ->label(__('filament-shield::filament-shield.field.guard_name'))
-                                    ->default(Utils::getFilamentAuthGuard())
-                                    ->nullable()
-                                    ->maxLength(255),
-
-                                Forms\Components\Select::make(config('permission.column_names.team_foreign_key'))
-                                    ->label(__('filament-shield::filament-shield.field.team'))
-                                    ->placeholder(__('filament-shield::filament-shield.field.team.placeholder'))
-                                    /** @phpstan-ignore-next-line */
-                                    ->default([Filament::getTenant()?->id])
-                                    ->options(fn (): Arrayable => Utils::getTenantModel() ? Utils::getTenantModel()::pluck('name', 'id') : collect())
-                                    ->hidden(fn (): bool => ! (static::shield()->isCentralApp() && Utils::isTenancyEnabled()))
-                                    ->dehydrated(fn (): bool => ! (static::shield()->isCentralApp() && Utils::isTenancyEnabled())),
-                                ShieldSelectAllToggle::make('select_all')
-                                    ->onIcon('heroicon-s-shield-check')
-                                    ->offIcon('heroicon-s-shield-exclamation')
-                                    ->label(__('filament-shield::filament-shield.field.select_all.name'))
-                                    ->helperText(fn (): HtmlString => new HtmlString(__('filament-shield::filament-shield.field.select_all.message')))
-                                    ->dehydrated(fn (bool $state): bool => $state),
-
-                            ])
-                            ->columns([
-                                'sm' => 2,
-                                'lg' => 3,
+                                Forms\Components\Grid::make()
+                                    ->schema([
+                                        Forms\Components\Section::make()
+                                            ->schema([
+                                                Forms\Components\TextInput::make('name')
+                                                    ->label(__('filament-shield::filament-shield.field.name'))
+                                                    ->unique(
+                                                        ignoreRecord: true, /** @phpstan-ignore-next-line */
+                                                        modifyRuleUsing: fn (Unique $rule) => Utils::isTenancyEnabled() ? $rule->where(Utils::getTenantModelForeignKey(), Filament::getTenant()?->id) : $rule
+                                                    )
+                                                    ->required()
+                                                    ->maxLength(255),
+                                                Forms\Components\TextInput::make('guard_name')
+                                                    ->label(__('filament-shield::filament-shield.field.guard_name'))
+                                                    ->default(Utils::getFilamentAuthGuard())
+                                                    ->nullable()
+                                                    ->maxLength(255),
+                                                Forms\Components\Select::make(config('permission.column_names.team_foreign_key'))
+                                                    ->label(__('filament-shield::filament-shield.field.team'))
+                                                    ->placeholder(__('filament-shield::filament-shield.field.team.placeholder'))
+                                                    /** @phpstan-ignore-next-line */
+                                                    ->default([Filament::getTenant()?->id])
+                                                    ->options(fn (): Arrayable => Utils::getTenantModel() ? Utils::getTenantModel()::pluck('name', 'id') : collect())
+                                                    ->hidden(fn (): bool => ! (static::shield()->isCentralApp() && Utils::isTenancyEnabled()))
+                                                    ->dehydrated(fn (): bool => ! (static::shield()->isCentralApp() && Utils::isTenancyEnabled())),
+                                                ShieldSelectAllToggle::make('select_all')
+                                                    ->onIcon('heroicon-s-shield-check')
+                                                    ->offIcon('heroicon-s-shield-exclamation')
+                                                    ->label(__('filament-shield::filament-shield.field.select_all.name'))
+                                                    ->helperText(fn (): HtmlString => new HtmlString(__('filament-shield::filament-shield.field.select_all.message')))
+                                                    ->dehydrated(fn (bool $state): bool => $state),
+                                            ])
+                                            ->columns([
+                                                'sm' => 2,
+                                                'lg' => 3,
+                                            ]),
+                                    ]),
+                            ]),
+                        Forms\Components\Tabs\Tab::make('Resources')
+                            ->schema([
+                                // Shield resource permissions UI
+                                static::getShieldFormComponents(),
+                            ]),
+                        Forms\Components\Tabs\Tab::make('Widgets')
+                            ->schema([
+                                // Add widgets UI here if needed
+                            ]),
+                        Forms\Components\Tabs\Tab::make('Permissions')
+                            ->schema([
+                                // Add custom permissions UI here if needed
                             ]),
                     ]),
-                static::getShieldFormComponents(),
             ]);
     }
 
