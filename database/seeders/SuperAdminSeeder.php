@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use App\Models\User;
@@ -24,62 +25,27 @@ class SuperAdminSeeder extends Seeder
             ]
         );
 
-        // 2) Ensure a Super Admin role exists (Spatie/Permission)
-        //    Use the same guard as your User model (usually "web")
+        // 2) Ensure a Super Admin role exists
         $role = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
 
-        // 3) Make sure all permissions exist (Shield usually generates these)
-        //    Then give the role every permission
+        // 3) Give the role every permission that exists
         $permissions = Permission::pluck('name')->all();
-        if (!empty($permissions)) {
+        if (! empty($permissions)) {
             $role->syncPermissions($permissions);
         }
 
         // 4) Assign the role to the user
-        if (!$user->hasRole($role->name)) {
+        if (! $user->hasRole($role->name)) {
             $user->assignRole($role->name);
         }
 
-        // Optional: if your app checks a boolean like `is_admin`
-        if ($user->isFillable('is_admin') || \Schema::hasColumn($user->getTable(), 'is_admin')) {
+        // Optional: set boolean flag if column exists
+        if (\Schema::hasColumn($user->getTable(), 'is_admin')) {
             $user->forceFill(['is_admin' => true])->save();
         }
 
-        $this->command->info('Super admin role assigned to user: '.$email.' with all permissions.');
-        $this->command->warn('Login with: '.$email.' / '.$password.' (or set SUPER_ADMIN_EMAIL/PASSWORD in .env)');
+        // Safe logs when running via Artisan
+        $this->command?->info('Super admin role assigned to: ' . $email);
+        $this->command?->warn('Login with: ' . $email . ' / ' . $password . ' (or set SUPER_ADMIN_* in .env)');
     }
 }
-        $user = User::updateOrCreate(
-            ['email' => $email],
-            [
-                'name' => 'Super Admin',
-                'password' => Hash::make($password),
-                'email_verified_at' => now(),
-            ]
-        );
-
-        // 2) Ensure a Super Admin role exists (Spatie/Permission)
-        //    Use the same guard as your User model (usually "web")
-        $role = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
-
-        // 3) Make sure all permissions exist (Shield usually generates these)
-        //    Then give the role every permission
-        $permissions = Permission::pluck('name')->all();
-        if (!empty($permissions)) {
-            $role->syncPermissions($permissions);
-        }
-
-        // 4) Assign the role to the user
-        if (!$user->hasRole($role->name)) {
-            $user->assignRole($role->name);
-        }
-
-        // Optional: if your app checks a boolean like `is_admin`
-        if ($user->isFillable('is_admin') || \Schema::hasColumn($user->getTable(), 'is_admin')) {
-            $user->forceFill(['is_admin' => true])->save();
-        }
-
-        $this->command->info('Super admin role assigned to user: '.$email.' with all permissions.');
-        $this->command->warn('Login with: '.$email.' / '.$password.' (or set SUPER_ADMIN_EMAIL/PASSWORD in .env)');
-    }
-} 
