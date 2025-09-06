@@ -60,16 +60,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(LogoutResponseContract::class, CustomLogOutResponse::class);
         Model::unguard();
-        Filament::registerNavigationGroups([
-            'Branches',
-            'Customers',
-            'Loan Agreement Forms',
-            'Wallets',
-            'Loans',
-            'Expenses',
-            'Repayments',
-            'Addons',
-        ]);
+    // Navigation groups are now registered in the panel provider using ->navigationGroups([...]) in Filament v3.
 
         User::observe(UserObserver::class);
         ThirdParty::observe(ThirdyPartyObserver::class);
