@@ -13,7 +13,7 @@ class SuperAdminSeeder extends Seeder
     public function run(): void
     {
         // 1) Create / update the user
-        $email = env('SUPER_ADMIN_EMAIL', 'solichsystems.com');
+        $email = env('SUPER_ADMIN_EMAIL', 'solichholdings@gmail.com');
         $password = env('SUPER_ADMIN_PASSWORD', 'admin123!');
 
         $user = User::updateOrCreate(
