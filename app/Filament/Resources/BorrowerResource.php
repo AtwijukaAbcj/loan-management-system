@@ -270,31 +270,34 @@ class BorrowerResource extends Resource {
                 ->description('Borrower Personal Details')
                 ->icon('heroicon-o-user-circle')
                 ->schema([
-                    TextEntry::make('first_name')->label('First Name'),
-                    TextEntry::make('last_name')->label('Last Name'),
-                    TextEntry::make('full_name')->label('Full Name'),
-                    TextEntry::make('gender')->label('Gender'),
-                    TextEntry::make('dob')->label('Date of Birth'),
-                    TextEntry::make('occupation')->label('Occupation'),
-                    TextEntry::make('identification')->label('National ID'),
-                    TextEntry::make('mobile')->label('Phone'),
-                    TextEntry::make('email')->label('Email'),
-                    TextEntry::make('address')->label('Address'),
-                    TextEntry::make('city')->label('City'),
-                    TextEntry::make('province')->label('Province'),
-                    TextEntry::make('zipcode')->label('Zipcode'),
-                    TextEntry::make('next_of_kin_first_name')->label('Next of Kin First Name'),
-                    TextEntry::make('next_of_kin_last_name')->label('Next of Kin Last Name'),
-                    TextEntry::make('phone_next_of_kin')->label('Phone Next of Kin'),
-                    TextEntry::make('address_next_of_kin')->label('Address Next of Kin'),
-                    TextEntry::make('relationship_next_of_kin')->label('Relationship to Next of Kin'),
-                    TextEntry::make('bank_name')->label('Bank Name'),
-                    TextEntry::make('bank_branch')->label('Bank Branch'),
-                    TextEntry::make('bank_sort_code')->label('Bank Sort Code'),
-                    TextEntry::make('bank_account_number')->label('Bank Account Number'),
-                    TextEntry::make('bank_account_name')->label('Bank Account Name'),
-                    TextEntry::make('mobile_money_name')->label('Mobile Money Name'),
-                    TextEntry::make('mobile_money_number')->label('Mobile Money Number'),
+                    Grid::make(2)
+                        ->schema([
+                            TextEntry::make('first_name')->label('First Name')->icon('heroicon-o-user'),
+                            TextEntry::make('last_name')->label('Last Name')->icon('heroicon-o-user'),
+                            TextEntry::make('full_name')->label('Full Name')->icon('heroicon-o-user-circle'),
+                            TextEntry::make('gender')->label('Gender')->icon('heroicon-o-users'),
+                            TextEntry::make('dob')->label('Date of Birth')->icon('heroicon-o-calendar'),
+                            TextEntry::make('occupation')->label('Occupation')->icon('heroicon-o-briefcase'),
+                            TextEntry::make('identification')->label('National ID')->icon('heroicon-o-identification'),
+                            TextEntry::make('mobile')->label('Phone')->icon('heroicon-o-phone'),
+                            TextEntry::make('email')->label('Email')->icon('heroicon-o-envelope'),
+                            TextEntry::make('address')->label('Address')->icon('heroicon-o-home'),
+                            TextEntry::make('city')->label('City')->icon('heroicon-o-map'),
+                            TextEntry::make('province')->label('Province')->icon('heroicon-o-map'),
+                            TextEntry::make('zipcode')->label('Zipcode')->icon('heroicon-o-map'),
+                            TextEntry::make('next_of_kin_first_name')->label('Next of Kin First Name')->icon('heroicon-o-user'),
+                            TextEntry::make('next_of_kin_last_name')->label('Next of Kin Last Name')->icon('heroicon-o-users'),
+                            TextEntry::make('phone_next_of_kin')->label('Phone Next of Kin')->icon('heroicon-o-phone'),
+                            TextEntry::make('address_next_of_kin')->label('Address Next of Kin')->icon('heroicon-o-home'),
+                            TextEntry::make('relationship_next_of_kin')->label('Relationship to Next of Kin')->icon('heroicon-o-users'),
+                            TextEntry::make('bank_name')->label('Bank Name')->icon('heroicon-o-banknotes'),
+                            TextEntry::make('bank_branch')->label('Bank Branch')->icon('heroicon-o-banknotes'),
+                            TextEntry::make('bank_sort_code')->label('Bank Sort Code')->icon('heroicon-o-banknotes'),
+                            TextEntry::make('bank_account_number')->label('Bank Account Number')->icon('heroicon-o-banknotes'),
+                            TextEntry::make('bank_account_name')->label('Bank Account Name')->icon('heroicon-o-user'),
+                            TextEntry::make('mobile_money_name')->label('Mobile Money Name')->icon('heroicon-o-currency-dollar'),
+                            TextEntry::make('mobile_money_number')->label('Mobile Money Number')->icon('heroicon-o-phone'),
+                        ]),
                 ]),
             Section::make('Collateral Details')
                 ->description('All collateral items for this borrower')
@@ -302,13 +305,17 @@ class BorrowerResource extends Resource {
                 ->schema(
                     \App\Models\Collateral::where('borrower_id', $borrower->id)->get()->map(function ($collateral) use ($borrower) {
                         $media = $borrower->getMedia('collaterals')->firstWhere('file_name', $collateral->document_path);
-                        return Grid::make(2)
+                        return Section::make($collateral->collateral_name ?? 'Collateral')
+                            ->icon('heroicon-o-archive-box')
                             ->schema([
-                                TextEntry::make('collateral_name')->label('Collateral Name')->default($collateral->collateral_name ?? '-'),
-                                TextEntry::make('item_value')->label('Market Value (UGX)')->default($collateral->item_value ?? '-'),
-                                TextEntry::make('item_type')->label('Type')->default($collateral->item_type ?? '-'),
-                                TextEntry::make('item_description')->label('Description')->default($collateral->item_description ?? '-'),
-                                TextEntry::make('loan_id')->label('Loan ID')->default($collateral->loan_id ?? '-'),
+                                Grid::make(2)
+                                    ->schema([
+                                        TextEntry::make('collateral_name')->label('Collateral Name')->default($collateral->collateral_name ?? '-')->icon('heroicon-o-archive-box'),
+                                        TextEntry::make('item_value')->label('Market Value (UGX)')->default($collateral->item_value ?? '-')->icon('heroicon-o-currency-dollar'),
+                                        TextEntry::make('item_type')->label('Type')->default($collateral->item_type ?? '-')->icon('heroicon-o-tag'),
+                                        TextEntry::make('item_description')->label('Description')->default($collateral->item_description ?? '-')->icon('heroicon-o-document-text'),
+                                        TextEntry::make('loan_id')->label('Loan ID')->default($collateral->loan_id ?? '-')->icon('heroicon-o-identification'),
+                                    ]),
                                 Actions::make([
                                     Action::make('download_' . ($media ? $media->id : $collateral->id))
                                         ->label('Download Collateral')
