@@ -1,31 +1,47 @@
-<form action="{{ route('borrower.destroy', $borrower->id) }}" method="POST" style="display: inline;">
-    @csrf
-    @method('DELETE')
-   
-
-    <!-- Password Confirmation Modal for each asset -->
-    <div class="modal fade" id="passwordConfirmationModal{{ $borrower->id }}" tabindex="-1" role="dialog" aria-labelledby="passwordConfirmationModalLabel{{ $borrower->id }}" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="passwordConfirmationModalLabel{{ $borrower->id }}">Confirm Delete</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="password{{ $borrower->id }}">Are you sure you want to delete this item? Please enter password to confirm.</label>
-                        <input type="password" class="form-control" id="password{{ $borrower->id }}" name="password">
-                    </div>
-                    <!-- Hidden input to store the asset ID -->
-                    <input type="hidden" name="asset_id" value="{{ $borrower->id }}">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-danger">Confirm Delete</button>
-                </div>
+<div class="container">
+    <h1>View Borrower</h1>
+    <form>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <div>
+                <label>First Name</label>
+                <input type="text" class="form-control" value="{{ $borrower->first_name }}" disabled>
+            </div>
+            <div>
+                <label>Last Name</label>
+                <input type="text" class="form-control" value="{{ $borrower->last_name }}" disabled>
+            </div>
+            <div>
+                <label>Full Name</label>
+                <input type="text" class="form-control" value="{{ $borrower->full_name }}" disabled>
+            </div>
+            <div>
+                <label>Gender</label>
+                <input type="text" class="form-control" value="{{ $borrower->gender }}" disabled>
+            </div>
+            <div>
+                <label>Date of Birth</label>
+                <input type="text" class="form-control" value="{{ $borrower->date_of_birth }}" disabled>
+            </div>
+            <div>
+                <label>Occupation</label>
+                <input type="text" class="form-control" value="{{ $borrower->occupation }}" disabled>
+            </div>
+            <div>
+                <label>National ID</label>
+                <input type="text" class="form-control" value="{{ $borrower->national_id }}" disabled>
+            </div>
+            <div>
+                <label>Phone</label>
+                <input type="text" class="form-control" value="{{ $borrower->phone }}" disabled>
+            </div>
+            <div>
+                <label>Email</label>
+                <input type="text" class="form-control" value="{{ $borrower->email }}" disabled>
+            </div>
+            <div style="grid-column: 1 / span 2;">
+                <label>Address</label>
+                <input type="text" class="form-control" value="{{ $borrower->address }}" disabled>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>

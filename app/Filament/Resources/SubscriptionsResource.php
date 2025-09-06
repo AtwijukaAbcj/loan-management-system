@@ -166,10 +166,10 @@ class SubscriptionsResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSubscriptions::route('/'),
+            'index'  => Pages\ListSubscriptions::route('/'),
             'create' => Pages\CreateSubscriptions::route('/create'),
-            'view' => Pages\ViewSubscriptions::route('/{record}'),
-            'edit' => Pages\EditSubscriptions::route('/{record}/edit'),
+            'view'   => Pages\ViewSubscriptions::route('/{record}'),
+            'edit'   => Pages\EditSubscriptions::route('/{record}/edit'),
         ];
     }
 }

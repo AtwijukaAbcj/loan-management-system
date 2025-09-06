@@ -1,19 +1,15 @@
 <?php
 
 namespace App\Providers\Filament;
-use Filament\Navigation\MenuItem;
-use App\Filament\Resources\LoanResource;
-use Filament\Navigation\NavigationItem;
-use Filament\Navigation\NavigationBuilder;
-use Filament\Navigation\NavigationGroup;
-use Filament\Http\Middleware\Authenticate;
-use Filament\Http\Middleware\DisableBladeIconComponents;
-use Filament\Http\Middleware\DispatchServingFilamentEvent;
+
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets;
+use Filament\Http\Middleware\Authenticate;
+use Filament\Http\Middleware\DisableBladeIconComponents;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
+
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -21,66 +17,57 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
-use Rmsramos\Activitylog\ActivitylogPlugin;
+
 use App\Http\Middleware\CheckSubscriptionValidity;
 use App\Filament\Pages\Auth\Register;
+
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Rmsramos\Activitylog\ActivitylogPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-        ->id('admin')
-        ->path('admin')
-        ->plugins([
-            FilamentShieldPlugin::make()
-                ->gridColumns([
-                    'default' => 1,
-                    'sm' => 2,
-                    'lg' => 2
-                ])
-                ->sectionColumnSpan(1)
-                ->checkboxListColumns([
-                    'default' => 1,
-                    'sm' => 2,
-                    'lg' => 4,
-                ])
-                ->resourceCheckboxListColumns([
-                    'default' => 1,
-                    'sm' => 2,
-                ]),
-                ActivitylogPlugin::make()
-                ->authorize(
-                    fn () => auth()->user()->hasRole('super_admin')
-                ),
-        ])
-        // ->brandLogo(asset('Logos/logo2.png'))
-        // ->brandLogoHeight('4rem')
-        // ->favicon(asset('Logos/logo2.png'))
-        ->sidebarCollapsibleOnDesktop()
+            ->id('admin')
+            ->path('admin')
+            ->authGuard('web')
+            ->sidebarCollapsibleOnDesktop()
 
-        ->login()
-        ->registration(Register::class)
-        ->passwordReset()
-        ->emailVerification()
-        ->profile()
-        ->default()
-        ->login()
-        ->colors([
+            // Auth & profile
+            ->login()
+            ->registration(Register::class)
+            ->passwordReset()
+            ->emailVerification()
+            ->profile()
+
+            // Theme
+            ->colors([
                 'primary' => Color::Amber,
             ])
+
+            // Register resources/pages/widgets automatically
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+
+            // (Optional) also list any resources you want to be sure are present
+            // ->resources([
+            //     \App\Filament\Resources\LoanResource::class,
+            //     // ...etc
+            // ])
+
             ->pages([
                 Pages\Dashboard::class,
+            ])
 
+            // Plugins (optional, but recommended if you use them)
+            ->plugins([
+                FilamentShieldPlugin::make()->superAdmin('super_admin'),
+                ActivitylogPlugin::make(),
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-            ->widgets([
-                // Widgets\AccountWidget::class,
-                // Widgets\FilamentInfoWidget::class,
-            ])
+
+            // Global middleware for Filament
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -91,8 +78,10 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-                CheckSubscriptionValidity::class
+                CheckSubscriptionValidity::class,
             ])
+
+            // Auth middleware
             ->authMiddleware([
                 Authenticate::class,
             ]);

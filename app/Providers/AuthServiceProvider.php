@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+
 use App\Models\Branches;
 use App\Models\ActivityLogs;
 use App\Models\Payments;
@@ -37,9 +40,6 @@ use App\Policies\TransactionPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\WalletPolicy;
 
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -48,22 +48,22 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        Branches::class          => BranchesPolicy::class,
-        ActivityLogs::class      => ActivityLogsPolicy::class,
-        Borrower::class          => BorrowerPolicy::class,
-        ExpenseCategory::class   => ExpenseCategoryPolicy::class,
-        Expense::class           => ExpensePolicy::class,
+        Branches::class            => BranchesPolicy::class,
+        ActivityLogs::class        => ActivityLogsPolicy::class,
+        Borrower::class            => BorrowerPolicy::class,
+        ExpenseCategory::class     => ExpenseCategoryPolicy::class,
+        Expense::class             => ExpensePolicy::class,
         LoanSettlementForms::class => LoanSettlementFormsPolicy::class,
-        Loan::class              => LoanPolicy::class,
-        LoanType::class          => LoanTypePolicy::class,
-        Messages::class          => MessagesPolicy::class,
-        Payments::class          => PaymentsPolicy::class,
-        Repayments::class        => RepaymentsPolicy::class,
-        Role::class              => RolePolicy::class,
-        ThirdParty::class        => ThirdPartyPolicy::class,
-        Transaction::class       => TransactionPolicy::class,
-        User::class              => UserPolicy::class,
-        Wallet::class            => WalletPolicy::class,
+        Loan::class                => LoanPolicy::class,
+        LoanType::class            => LoanTypePolicy::class,
+        Messages::class            => MessagesPolicy::class,
+        Payments::class            => PaymentsPolicy::class,
+        Repayments::class          => RepaymentsPolicy::class,
+        Role::class                => RolePolicy::class,
+        ThirdParty::class          => ThirdPartyPolicy::class,
+        Transaction::class         => TransactionPolicy::class,
+        User::class                => UserPolicy::class,
+        Wallet::class              => WalletPolicy::class,
     ];
 
     /**
@@ -71,12 +71,26 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Register policies (optional on Laravel 10+, but harmless)
         $this->registerPolicies();
 
-        // Super-admin bypass: sees/does everything in Filament & app policies
+        // Super-admin bypass: can "do everything" across the app & Filament
         Gate::before(function ($user, string $ability) {
-            return (method_exists($user, 'hasRole') && $user->hasRole('super_admin')) ? true : null;
+            // Spatie\Permission
+            if (method_exists($user, 'hasRole') && $user->hasRole('super_admin')) {
+                return true;
+            }
+
+            // Custom relation
+            if (method_exists($user, 'roles') && $user->roles()->where('name', 'super_admin')->exists()) {
+                return true;
+            }
+
+            // Simple boolean flag
+            if (property_exists($user, 'is_admin') && $user->is_admin) {
+                return true;
+            }
+
+            return null; // fall back to normal policies
         });
     }
 }

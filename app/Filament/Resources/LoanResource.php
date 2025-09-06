@@ -366,13 +366,10 @@ class LoanResource extends Resource
     public static function getPages(): array
     {
         return [
-
-
             'index' => Pages\ListLoans::route('/'),
             'create' => Pages\CreateLoan::route('/create'),
             'view' => Pages\ViewLoan::route('/{record}'),
             'edit' => Pages\EditLoan::route('/{record}/edit'),
-
         ];
     }
 }

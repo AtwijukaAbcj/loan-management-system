@@ -14,9 +14,11 @@ class LoanStatusNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct($message)
+    public function __construct($message, $actionUrl = null, $actionText = 'Go to Site')
     {
         $this->message = $message;
+        $this->actionUrl = $actionUrl;
+        $this->actionText = $actionText;
     }
 
     /**
@@ -34,11 +36,16 @@ class LoanStatusNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-        ->greeting('LOAN STATUS: '.strtoupper(auth()->user()->name))
-        ->line($this->message)
-        ->action('Go to Site', url('/'))
-        ->line('Thank you!');
+        $mail = (new MailMessage)
+            ->greeting('LOAN STATUS: '.strtoupper(auth()->user()->name))
+            ->line($this->message);
+        if ($this->actionUrl) {
+            $mail->action($this->actionText, $this->actionUrl);
+        } else {
+            $mail->action('Go to Site', url('/'));
+        }
+        $mail->line('Thank you!');
+        return $mail;
     }
 
     /**

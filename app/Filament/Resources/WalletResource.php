@@ -122,10 +122,10 @@ class WalletResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListWallets::route('/'),
+            'index'  => Pages\ListWallets::route('/'),
             'create' => Pages\CreateWallet::route('/create'),
-            'view' => Pages\ViewWallet::route('/{record}'),
-            'edit' => Pages\EditWallet::route('/{record}/edit'),
+            'view'   => Pages\ViewWallet::route('/{record}'),
+            'edit'   => Pages\EditWallet::route('/{record}/edit'),
         ];
     }
 }
