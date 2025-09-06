@@ -7,13 +7,15 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('pesapal_settings', function (Blueprint $table) {
-            $table->id();
-            $table->string('consumer_key');
-            $table->string('consumer_secret');
-            $table->boolean('is_active')->default(false);
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('pesapal_settings')) {
+            Schema::create('pesapal_settings', function (Blueprint $table) {
+                $table->id();
+                $table->string('consumer_key');
+                $table->string('consumer_secret');
+                $table->boolean('is_active')->default(false);
+                $table->timestamps();
+            });
+        }
     }
 
     public function down(): void
