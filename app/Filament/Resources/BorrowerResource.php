@@ -69,10 +69,6 @@ class BorrowerResource extends Resource {
         return $form
             ->schema([
                 // ...existing code...
-                Forms\Components\Toggle::make('disabled')
-                    ->label('Disabled')
-                    ->helperText('Mark borrower as disabled to prevent further actions.')
-                    ->inline(false),
                 // ...existing code...
             ]);
     }
@@ -102,7 +98,6 @@ class BorrowerResource extends Resource {
                             TextEntry::make('city')->label('City')->icon('heroicon-o-map'),
                             TextEntry::make('province')->label('Province')->icon('heroicon-o-map'),
                             TextEntry::make('zipcode')->label('Zipcode')->icon('heroicon-o-map'),
-                            TextEntry::make('disabled')->label('Disabled')->icon('heroicon-o-x-circle'),
                         ]),
                     Section::make('Next of Kin & Bank Details')
                         ->schema([
